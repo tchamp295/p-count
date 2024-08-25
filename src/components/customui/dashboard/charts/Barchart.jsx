@@ -1,18 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, LabelList } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -39,29 +37,44 @@ const chartConfig = {
 };
 
 export function Barchart() {
+  const [filter, setFilter] = useState("All");
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+    // In the future, you would implement actual filtering logic here
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-lg font-medium">SFPS Acknowledgement Analysis By Region</CardTitle>
-        {/* <CardDescription>January - June 2024</CardDescription> */}
+        <div className="mt-4">
+          <label htmlFor="filter" className="mr-2">Filter :</label>
+          <select
+            id="filter"
+            value={filter}
+            onChange={handleFilterChange}
+            className="border rounded p-1"
+          >
+            <option value="All">All</option>
+            <option value="Desktop">Desktop</option>
+            <option value="Mobile">Mobile</option>
+          </select>
+        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart width={600} height={300} data={chartData}>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+            <YAxis />
+            <Tooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4}>
+              <LabelList dataKey="desktop" position="top" />
+            </Bar>
+            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4}>
+              <LabelList dataKey="mobile" position="top" />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
