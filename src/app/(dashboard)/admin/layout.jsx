@@ -1,15 +1,23 @@
 import Navbar from "@/components/customui/Navbar";
-import Sidebar from "@/components/customui/Sidebar";
+import Sidebar from "@/components/customui/sidebar/Sidebar";
 
-
-export default function AdminLayout({ children }) {
+const Layout = ({ children }) => {
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Sidebar */}
       <Sidebar />
-      <div className="flex flex-col">
+
+      <div className="flex-1 lg:ml-64">
+        {/* Navbar */}
         <Navbar />
-        {children}
+
+        {/* Page content */}
+        <main className="flex-1 px-4 lg:px-6 pt-4 overflow-y-auto ">
+          {children}
+        </main>
       </div>
     </div>
   );
-}
+};
+
+export default Layout;
