@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import { navItems } from "@/lib/data";
 import NavItem from "./navitem/NavItem";
 import { Bell, Package2 } from "lucide-react";
@@ -5,10 +7,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const Sidebar = () => {
+  const [activeAccordion, setActiveAccordion] = useState(null);
+
   return (
     <div className="fixed top-0 left-0 w-64 h-screen border-r bg-muted/40 hidden lg:block">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-      <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link href="/" className="flex items-center gap-2 font-semibold">
           <Package2 className="h-6 w-6" />
           <span className="">P-count</span>
         </Link>
@@ -26,6 +30,9 @@ const Sidebar = () => {
             label={item.label}
             badgeCount={item.badgeCount}
             title={item.title}
+            links={item.links}
+            isActiveAccordion={activeAccordion}
+            setActiveAccordion={setActiveAccordion}
           />
         ))}
       </nav>

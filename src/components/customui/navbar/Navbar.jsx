@@ -2,9 +2,9 @@ import { Bell, CircleUser, Package2, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { ModeToggle } from "../ui/mode-toggle";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { ModeToggle } from "../../ui/mode-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 
 const Navbar = () => {
   return (

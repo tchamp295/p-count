@@ -1,4 +1,4 @@
-import Navbar from "@/components/customui/Navbar";
+import Navbar from "@/components/customui/navbar/Navbar";
 import Sidebar from "@/components/customui/sidebar/Sidebar";
 
 const Layout = ({ children }) => {
