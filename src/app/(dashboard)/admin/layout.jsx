@@ -1,5 +1,5 @@
 import Navbar from "@/components/customui/Navbar";
-import Sidebar from "@/components/customui/SideBar";
+import Sidebar from "@/components/customui/Sidebar";
 
 
 export default function AdminLayout({ children }) {
