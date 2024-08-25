@@ -1,5 +1,7 @@
-import Link from "next/link"
+import Link from "next/link";
 import {
+  AlertTriangle,
+  BarChart,
   Bell,
   CircleUser,
   Home,
@@ -8,19 +10,22 @@ import {
   Package,
   Package2,
   Search,
+  Server,
+  Settings,
   ShoppingCart,
+  UserCheck,
   Users,
-} from "lucide-react"
+} from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,13 +33,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { ModeToggle } from "@/components/ui/mode-toggle"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 const Navbar = () => {
   return (
-    
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
         <SheetTrigger asChild>
@@ -63,15 +67,14 @@ const Navbar = () => {
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
             >
-              <ShoppingCart className="h-5 w-5" />
-             Ips management
-              
+              <Server className="h-5 w-5" />
+              Ips Management
             </Link>
             <Link
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <Package className="h-5 w-5" />
+              <Bell className="h-5 w-5" />
               Alerts
               <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                 6
@@ -82,38 +85,37 @@ const Navbar = () => {
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <Users className="h-5 w-5" />
-             Contacts
+              Contacts
             </Link>
             <Link
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
+              <BarChart className="h-5 w-5" />
               Reports
             </Link>
             <Link
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
-           Advisories
+              <AlertTriangle className="h-5 w-5" />
+              Advisories
             </Link>
             <Link
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
+              <UserCheck className="h-5 w-5" />
               User Management
             </Link>
             <Link
               href="#"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
               Settings
             </Link>
           </nav>
-          
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1">
