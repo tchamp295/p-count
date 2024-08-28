@@ -14,7 +14,7 @@ const Regions = () => {
         </Button>
         </Link>
       </div>
-      <DataTableDemo />
+     
     </div>
   );
 };

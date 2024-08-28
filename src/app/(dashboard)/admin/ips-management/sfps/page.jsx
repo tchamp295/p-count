@@ -14,7 +14,7 @@ const Sfps= () => {
         </Button>
         </Link>
       </div>
-      <DataTableDemo />
+     
     </div>
   );
 };
