@@ -20,9 +20,9 @@ export const navItems = [
     icon: <Server />,
     title: "Ips Management",
     links: [
-      { href: "/ips-management/list", label: "List of IPs" },
-      { href: "/ips-management/regions", label: "Regions" },
-      { href: "/ips-management/sfps", label: "List of SFPS" },
+      { href: "/admin/ips-management/ips", label: "List of IPs" },
+      { href: "/admin/ips-management/regions", label: "Regions" },
+      { href: "/admin/ips-management/sfps", label: "List of SFPS" },
     ],
   },
   {
