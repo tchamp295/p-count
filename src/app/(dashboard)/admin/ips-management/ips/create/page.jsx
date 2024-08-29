@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast"; // Import React Hot Toast
-
+import { useRouter } from "next/navigation"; 
 const AddIp = () => {
   // State variables for each input field
   const [ipName, setIpName] = useState("");
@@ -16,6 +16,7 @@ const AddIp = () => {
   const [ipContactTelephone, setIpContactTelephone] = useState("");
   const [ipContactEmail, setIpContactEmail] = useState("");
 
+  const router = useRouter(); 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -56,6 +57,7 @@ const AddIp = () => {
       setIpContactEmail("");
 
       toast.success("IP added successfully!");
+      router.push("/admin/ips-management/ips");
     } catch (error) {
       toast.error(error.message);
     }

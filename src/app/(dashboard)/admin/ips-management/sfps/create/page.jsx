@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast"; // Import React Hot Toast
+import { useRouter } from "next/navigation";
 
 const AddSfp = () => {
   // State variables for each input field
@@ -15,6 +16,7 @@ const AddSfp = () => {
   const [region, setRegion] = useState(""); // State for region
   const [regions, setRegions] = useState([]); // State to hold regions
 
+  const router = useRouter(); 
   useEffect(() => {
     // Fetch regions from the API endpoint
     const fetchRegions = async () => {
@@ -71,6 +73,7 @@ const AddSfp = () => {
       setRegion("");
 
       toast.success("SFP added successfully!");
+      router.push("/admin/ips-management/sfps");
     } catch (error) {
       toast.error(error.message);
     }

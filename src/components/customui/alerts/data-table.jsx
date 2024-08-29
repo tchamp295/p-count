@@ -89,7 +89,7 @@ const columns = [
   },
 ];
 
-export default function IpDataTable() {
+export default function AlertsDataTable() {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);

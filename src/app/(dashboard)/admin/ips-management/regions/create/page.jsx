@@ -4,16 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"; 
 import toast, { Toaster } from "react-hot-toast"; // Import React Hot Toast
+import { useRouter } from "next/navigation";
 
 const AddRegion = () => {
   const [regionName, setRegionName] = useState("");
-
+  const router = useRouter(); 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Send a POST request to the API with the region name
     try {
-      const res = await fetch('/api/region/add', {
+      const res = await fetch('/api/regions/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +26,8 @@ const AddRegion = () => {
 
       if (res.ok) {
         toast.success(data.message); // Show success toast
-        setRegionName(""); // Clear the input field on success
+        setRegionName("");
+        router.push("/admin/ips-management/regions");
       } else {
         toast.error(data.message || 'An error occurred'); // Show error toast
       }
@@ -53,12 +55,11 @@ const AddRegion = () => {
               onChange={(e) => setRegionName(e.target.value)}
             />
           </div>
-          <Button
-            type="submit"
-            className="mt-4 bg-purple-400 hover:bg-purple-500"
-          >
-            Submit
-          </Button>
+          <div className="col-span-3">
+              <Button type="submit" className="mt-4 bg-purple-400 hover:bg-purple-500">
+                Create
+              </Button>
+            </div>
         </fieldset>
       </form>
     </div>

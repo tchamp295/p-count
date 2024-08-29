@@ -68,11 +68,11 @@ const NavItem = ({
         >
           <span className="flex items-center h-4 w-4">{icon}</span>
           {title}
-          {badgeCount && (
+          {/* {badgeCount && (
             <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500 text-white">
               {badgeCount}
             </span>
-          )}
+          )} */}
           <span className="ml-auto">{/* Arrow or indicator for collapse */}</span>
         </AccordionTrigger>
         {links && links.length > 0 && isActiveAccordion=== title && (

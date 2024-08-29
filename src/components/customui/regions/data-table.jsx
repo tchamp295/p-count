@@ -32,33 +32,20 @@ import {
 
 const columns = [
   {
-    accessorKey: "ip_name",
-    header: "IP Name",
-    cell: ({ row }) => <div>{row.getValue("ip_name")}</div>,
+    accessorKey: "region_name",
+    header: "Region",
+    cell: ({ row }) => <div>{row.getValue("region_name")}</div>,
   },
   {
-    accessorKey: "ip_telephone",
-    header: "Telephone",
-    cell: ({ row }) => <div>{row.getValue("ip_telephone")}</div>,
+    accessorKey: "total_ips",
+    header: "Total IPs",
+    cell: ({ row }) => <div>{row.getValue("total_ips")}</div>,
   },
   {
-    accessorKey: "ip_email_address",
-    header: "Email",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("ip_email_address")}</div>,
+    accessorKey: "total_sfps",
+    header: "Total SFPS",
+    cell: ({ row }) => <div>{row.getValue("total_sfps")}</div>,
   },
-  
-  {
-    accessorKey: "ip_physical_location",
-    header: "Physical Location",
-    cell: ({ row }) => <div>{row.getValue("ip_physical_location")}</div>,
-  },
-  
-  {
-    accessorKey: "ip_contact_telephone",
-    header: "Contact Telephone",
-    cell: ({ row }) => <div>{row.getValue("ip_contact_telephone")}</div>,
-  },
-  
   {
     id: "actions",
     enableHiding: false,
@@ -89,19 +76,36 @@ const columns = [
   },
 ];
 
-export default function IpDataTable() {
+export default function RegionsDataTable() {
   const [data, setData] = useState([]);
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/ips");
-        const result = await response.json();
-        setData(result); // Ensure data is in the correct format
+        // Fetch regions
+        const regionsResponse = await fetch("/api/regions");
+        const regions = await regionsResponse.json();
+
+        // Fetch total IPs count
+        const ipsResponse = await fetch("/api/ips/ip-count");
+        const ipsCount = await ipsResponse.json();
+
+        // Fetch total SFPS count
+        const sfpsResponse = await fetch("/api/sfps/sfp-count");
+        const sfpsCount = await sfpsResponse.json();
+
+        // Combine fetched data
+        const combinedData = regions.map((region) => ({
+          ...region,
+          total_ips: ipsCount.count, // Adjust this logic based on the actual data returned
+          total_sfps: sfpsCount.count, // Adjust this logic based on the actual data returned
+        }));
+
+        setData(combinedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -133,10 +137,10 @@ export default function IpDataTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by IP Name..."
-          value={(table.getColumn("ip_name")?.getFilterValue()) ?? ""}
+          placeholder="Filter by Region..."
+          value={table.getColumn("region_name")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("ip_name")?.setFilterValue(event.target.value)
+            table.getColumn("region_name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -155,9 +159,7 @@ export default function IpDataTable() {
                   key={column.id}
                   className="capitalize"
                   checked={column.getIsVisible()}
-                  onCheckedChange={(value) =>
-                    column.toggleVisibility(!!value)
-                  }
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 >
                   {column.id}
                 </DropdownMenuCheckboxItem>
@@ -174,10 +176,7 @@ export default function IpDataTable() {
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -186,26 +185,17 @@ export default function IpDataTable() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

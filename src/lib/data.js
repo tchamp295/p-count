@@ -30,9 +30,9 @@ export const navItems = [
     title: "Alerts",
     badgeCount: 6,
     links: [
-      { href: "/alerts/create", label: "Create New" },
-      { href: "/alerts/active", label: "Active Alerts" },
-      { href: "/alerts/all", label: "All Alerts" },
+      { href: "/admin/ips-management/alerts/create", label: "Create New" },
+      { href: "/admin/ips-management/alerts/active", label: "Active Alerts" },
+      { href: "/admin/ips-management/alerts/all", label: "All Alerts" },
     ],
   },
   {

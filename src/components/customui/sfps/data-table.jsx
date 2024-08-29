@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -29,86 +29,93 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import toast from "react-hot-toast"; // Import React Hot Toast
 
-const columns = [
-  {
-    accessorKey: "ip_name",
-    header: "IP Name",
-    cell: ({ row }) => <div>{row.getValue("ip_name")}</div>,
-  },
-  {
-    accessorKey: "ip_telephone",
-    header: "Telephone",
-    cell: ({ row }) => <div>{row.getValue("ip_telephone")}</div>,
-  },
-  {
-    accessorKey: "ip_email_address",
-    header: "Email",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("ip_email_address")}</div>,
-  },
-  
-  {
-    accessorKey: "ip_physical_location",
-    header: "Physical Location",
-    cell: ({ row }) => <div>{row.getValue("ip_physical_location")}</div>,
-  },
-  
-  {
-    accessorKey: "ip_contact_telephone",
-    header: "Contact Telephone",
-    cell: ({ row }) => <div>{row.getValue("ip_contact_telephone")}</div>,
-  },
-  
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const record = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(record.ip_email_address)}
-            >
-              Copy email
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
-export default function IpDataTable() {
+const SfpTable = () => {
   const [data, setData] = useState([]);
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
 
+  // Fetch SFP data
   useEffect(() => {
-    async function fetchData() {
+    const fetchSfps = async () => {
       try {
-        const response = await fetch("/api/ips");
-        const result = await response.json();
-        setData(result); // Ensure data is in the correct format
+        const response = await fetch("/api/sfps");
+        if (!response.ok) {
+          throw new Error("Failed to fetch SFPs");
+        }
+        const data = await response.json();
+        setData(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.error(error.message);
       }
-    }
+    };
 
-    fetchData();
+    fetchSfps();
   }, []);
+
+  // Define columns for the table
+  const columns = [
+    {
+      accessorKey: "ip_name",
+      header: "IP Name",
+      cell: ({ row }) => <div>{row.getValue("ip_name")}</div>,
+    },
+    {
+      accessorKey: "sfp_name",
+      header: "SFP Name",
+      cell: ({ row }) => <div>{row.getValue("sfp_name")}</div>,
+    },
+    {
+      accessorKey: "sfp_email",
+      header: "SFP Email",
+      cell: ({ row }) => <div>{row.getValue("sfp_email")}</div>,
+    },
+    {
+      accessorKey: "sfp_telephone",
+      header: "SFP Telephone",
+      cell: ({ row }) => <div>{row.getValue("sfp_telephone")}</div>,
+    },
+    {
+      accessorKey: "gender",
+      header: "Gender",
+      cell: ({ row }) => <div>{row.getValue("gender")}</div>,
+    },
+    {
+      accessorKey: "region",
+      header: "Region",
+      cell: ({ row }) => <div>{row.getValue("region")}</div>,
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const record = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(record.sfpEmail)}
+              >
+                Copy email
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
     data,
@@ -134,9 +141,9 @@ export default function IpDataTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by IP Name..."
-          value={(table.getColumn("ip_name")?.getFilterValue()) ?? ""}
+          value={table.getColumn("ipName")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("ip_name")?.setFilterValue(event.target.value)
+            table.getColumn("ipName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -186,10 +193,7 @@ export default function IpDataTable() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -202,10 +206,7 @@ export default function IpDataTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -218,25 +219,9 @@ export default function IpDataTable() {
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default SfpTable;
