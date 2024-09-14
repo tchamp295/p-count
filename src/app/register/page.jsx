@@ -1,46 +1,28 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import { register } from "@/lib/action";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from 'next/navigation';
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useFormStatus, useFormState } from "react-dom";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [state, formAction] = useFormState(register, undefined);
   const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({  email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-
-      // On successful sign-up, you could redirect to another page or show a success message
-      router.push('/'); // Replace with your desired route
-
-    } catch (err) {
-      setError(err.message);
+  useEffect(() => {
+    if (state?.success) {
+      toast.success("Registration successful!");
+      router.push("/login");
+    } else if (state?.error) {
+      toast.error(state.error);
     }
-  };
-
+  }, [state?.success, state?.error, router]);
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -51,18 +33,25 @@ export default function Register() {
               Enter the details below to register your account
             </p>
           </div>
-          {error && (
-            <div className="text-red-500 text-center">{error}</div>
-          )}
-          <form onSubmit={handleSubmit} className="grid gap-4">
+
+          <form action={formAction} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="name"
+                placeholder="Full Name"
+                name="name"
+                required
+              />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                name="email"
                 required
               />
             </div>
@@ -79,8 +68,16 @@ export default function Register() {
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder=" Password"
+                name="password"
+                required
+              />
+              <Input
+              className="mt-1"
+                id="password"
+                type="password"
+                placeholder="Confirm Password"
+                name="confirmPassword"
                 required
               />
             </div>
@@ -90,14 +87,14 @@ export default function Register() {
           </form>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
-            <Link href="/sign-in" className="underline">
+            <Link href="/login" className="underline">
               Sign In
             </Link>
           </div>
         </div>
       </div>
       <div className="hidden bg-muted lg:block">
-      <Image
+        <Image
           src="/placeholder.svg"
           alt="Image"
           width="1920"

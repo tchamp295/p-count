@@ -22,26 +22,26 @@
 
 // export { sql, poolPromise };
 // lib/db.js
-import sql from 'mssql';
+// import sql from 'mssql';
 
-const config = {
-  user: 'ndemo',
-  password: '123',
-  server: 'localhost',
-  database: 'pcount',
-  options: {
-    encrypt: false, // Set to true if using Azure SQL Database or if encryption is required
+// const config = {
+//   user: 'ndemo',
+//   password: '123',
+//   server: 'localhost',
+//   database: 'pcount',
+//   options: {
+//     encrypt: false, // Set to true if using Azure SQL Database or if encryption is required
     
-  },
-};
+//   },
+// };
 
-export async function connectToDatabase() {
-  try {
-    await sql.connect(config);
-    console.log('Connected to SQL Server');
-    return sql;
-  } catch (err) {
-    console.error('Database connection error: ', err);
-    throw new Error('Failed to connect to the database');
-  }
-}
+// export async function connectToDatabase() {
+//   try {
+//     await sql.connect(config);
+//     console.log('Connected to SQL Server');
+//     return sql;
+//   } catch (err) {
+//     console.error('Database connection error: ', err);
+//     throw new Error('Failed to connect to the database');
+//   }
+// }

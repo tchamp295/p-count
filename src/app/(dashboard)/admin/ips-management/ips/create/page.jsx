@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import toast, { Toaster } from "react-hot-toast"; // Import React Hot Toast
-import { useRouter } from "next/navigation"; 
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 const AddIp = () => {
-  // State variables for each input field
   const [ipName, setIpName] = useState("");
   const [ipTelephone, setIpTelephone] = useState("");
   const [ipEmailAddress, setIpEmailAddress] = useState("");
@@ -15,8 +15,29 @@ const AddIp = () => {
   const [ipContactPerson, setIpContactPerson] = useState("");
   const [ipContactTelephone, setIpContactTelephone] = useState("");
   const [ipContactEmail, setIpContactEmail] = useState("");
+  const [regions, setRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState(""); // State for selected region
+  const router = useRouter();
 
-  const router = useRouter(); 
+  useEffect(() => {
+    // Fetch regions when the component mounts
+    const fetchRegions = async () => {
+      try {
+        const response = await fetch("/api/regions"); // Adjust endpoint as needed
+        const data = await response.json();
+        if (response.ok) {
+          setRegions(data); // Directly set data if it's an array
+        } else {
+          toast.error("Failed to load regions.");
+        }
+      } catch (error) {
+        toast.error("Error fetching regions.");
+      }
+    };
+
+    fetchRegions();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,6 +51,7 @@ const AddIp = () => {
       ipContactPerson,
       ipContactTelephone,
       ipContactEmail,
+      regionId: selectedRegion, // Include the selected region ID
     };
 
     try {
@@ -55,6 +77,7 @@ const AddIp = () => {
       setIpContactPerson("");
       setIpContactTelephone("");
       setIpContactEmail("");
+      setSelectedRegion(""); // Reset selected region
 
       toast.success("IP added successfully!");
       router.push("/admin/ips-management/ips");
@@ -118,7 +141,7 @@ const AddIp = () => {
             {/* Postal Address */}
             <div className="flex flex-col gap-1">
               <Label htmlFor="ip-postal-address" className="text-sm">
-                Ip Postal Address
+                IP Postal Address
               </Label>
               <Input
                 id="ip-postal-address"
@@ -131,8 +154,8 @@ const AddIp = () => {
 
             {/* Physical Location */}
             <div className="flex flex-col gap-1">
-              <Label htmlFor="physical-location" className="text-sm">
-                Ip Physical Location
+              <Label htmlFor="ip-physical-location" className="text-sm">
+                IP Physical Location
               </Label>
               <Input
                 id="ip-physical-location"
@@ -183,6 +206,26 @@ const AddIp = () => {
                 value={ipContactEmail}
                 onChange={(e) => setIpContactEmail(e.target.value)}
               />
+            </div>
+
+            {/* Region Selection */}
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="region-select" className="text-sm">
+                Region
+              </Label>
+              <select
+                id="region-select"
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="">Select a Region</option>
+                {regions.map((region) => (
+                  <option key={region._id} value={region._id}>
+                    {region.regionName}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

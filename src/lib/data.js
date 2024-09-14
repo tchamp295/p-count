@@ -1,77 +1,73 @@
-import {
-  AlertTriangle,
-  BarChart,
-  Bell,
-  Home,
-  Package2,
-  Server,
-  Settings,
-  UserCheck,
-  Users,
-} from "lucide-react";
-
-export const navItems = [
-  {
-    href: "/admin",
-    icon: <Home />,
-    title: "Dashboard",
-  },
-  {
-    icon: <Server />,
-    title: "Ips Management",
-    links: [
-      { href: "/admin/ips-management/ips", label: "List of IPs" },
-      { href: "/admin/ips-management/regions", label: "Regions" },
-      { href: "/admin/ips-management/sfps", label: "List of SFPS" },
-    ],
-  },
-  {
-    icon: <Bell />,
-    title: "Alerts",
-    badgeCount: 6,
-    links: [
-      { href: "/admin/ips-management/alerts/create", label: "Create New" },
-      { href: "/admin/ips-management/alerts/active", label: "Active Alerts" },
-      { href: "/admin/ips-management/alerts/all", label: "All Alerts" },
-    ],
-  },
-  {
-    icon: <Users />,
-    title: "Contacts",
-    links: [
-      { href: "/contacts/list", label: "List of Contacts" },
-      { href: "/contacts/grouping", label: "Contact Grouping" },
-    ],
-  },
-  {
-    icon: <BarChart />,
-    title: "Reports",
-    links: [
-      { href: "/reports/alert", label: "Alert Reports" },
-      { href: "/reports/ip-alerts", label: "IP Alerts" },
-      { href: "/reports/contact-additions", label: "Contact Additions" },
-      { href: "/reports/sfp-activity", label: "SFP Activity Report" },
-      { href: "/reports/sfp-contact", label: "SFP Contact Report" },
-    ],
-  },
-  {
-    icon: <AlertTriangle />,
-    title: "Advisories",
-    links: [
-      { href: "/advisories/list", label: "Advisories" },
-      { href: "/advisories/types", label: "Advisory Types" },
-    ],
-  },
-  {
-    icon: <UserCheck />,
-    title: "User Management",
-    links: [
-      { href: "/user-management/system-users", label: "System Users" },
-    ],
-  },
-  {
-    href: "/admin/settings",
-    icon: <Settings />,
-    title: "Settings",
-  },
-];
+import {Project} from "@/models/regions";
+import { connectMongoDB } from "./mongoose";
+import { unstable_noStore as noStore } from "next/cache";
+import { Post } from "@/models/ip";
+import { User } from "@/models/user";
+export const getPosts = async () => {
+  try {
+   await connectMongoDB();
+    const posts = await Post.find();
+    return posts;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get posts");
+  }
+};
+export const getProjects = async () => {
+  try {
+    await connectMongoDB();
+    const projects = await Project.find();
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get projects");
+  }
+};
+export const getProject = async (slug) => {
+  try {
+    await connectMongoDB();
+    // console.log(slug);
+    const project = await Project.findOne({ slug });
+    if (!project) {
+      throw new Error("Project not found");
+    }
+    // console.log(project);
+    return project;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get project");
+  }
+};
+export const getPost = async (slug) => {
+  try {
+    await connectMongoDB();
+    // console.log(slug);
+    const post = await Post.findOne({ slug });
+    // console.log(post);
+    return post;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get post");
+  }
+};
+export const getUser = async (id) => {
+  noStore();
+  try {
+    await connectMongoDB();
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get user");
+  }
+};
+export const getUsers = async () => {
+  try {
+    await connectMongoDB();
+    const users = await User.find();
+    return users;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to get users");
+  }
+};

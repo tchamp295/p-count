@@ -1,96 +1,47 @@
-import { connectToDatabase } from '@/lib/dbConfig'; // Ensure this points to your correct dbConfig path
+import { connectMongoDB } from '@/lib/mongoose';
+import { Ip } from '@/models/ip';
+import { Region } from '@/models/region'; // Import the Region model
+import { NextResponse } from 'next/server';
 
+// POST: Create a new IP record and assign it to a region
 export async function POST(req) {
-  // Parse the request body
-  const {
-    ipName,
-    ipTelephone,
-    ipEmailAddress,
-    ipPostalAddress,
-    ipPhysicalLocation,
-    ipContactPerson,
-    ipContactTelephone,
-    ipContactEmail,
-  } = await req.json();
-
-  // Validate the input
-  if (
-    !ipName ||
-    !ipTelephone ||
-    !ipEmailAddress ||
-    !ipPostalAddress ||
-    !ipPhysicalLocation ||
-    !ipContactPerson ||
-    !ipContactTelephone ||
-    !ipContactEmail
-  ) {
-    return new Response(
-      JSON.stringify({ message: 'All fields are required' }),
-      { status: 400 }
-    );
-  }
+  await connectMongoDB(); // Connect to the database
 
   try {
-    // Connect to the database
-    const db = await connectToDatabase();
-    const pool = await db.connect();
+    const {
+      ipName,
+      ipTelephone,
+      ipEmailAddress,
+      ipPostalAddress,
+      ipPhysicalLocation,
+      ipContactPerson,
+      ipContactTelephone,
+      ipContactEmail,
+      regionId, // Add regionId in the request body
+    } = await req.json();
 
-    // Check if the IP already exists (if applicable)
-    const existingIp = await pool
-      .request()
-      .input('ipName', db.VarChar, ipName)
-      .query('SELECT * FROM Ips WHERE ip_name = @ipName');
+    // Create new IP document
+    const newIp = new Ip({
+      ipName,
+      ipTelephone,
+      ipEmailAddress,
+      ipPostalAddress,
+      ipPhysicalLocation,
+      ipContactPerson,
+      ipContactTelephone,
+      ipContactEmail,
+    });
 
-    if (existingIp.recordset.length > 0) {
-      return new Response(
-        JSON.stringify({ message: 'IP already exists' }),
-        { status: 400 }
-      );
-    }
+    const savedIp = await newIp.save(); // Save the new IP to MongoDB
 
-    // Insert the new IP into the database
-    await pool
-      .request()
-      .input('ipName', db.VarChar, ipName)
-      .input('ipTelephone', db.VarChar, ipTelephone)
-      .input('ipEmailAddress', db.VarChar, ipEmailAddress)
-      .input('ipPostalAddress', db.VarChar, ipPostalAddress)
-      .input('ipPhysicalLocation', db.VarChar, ipPhysicalLocation)
-      .input('ipContactPerson', db.VarChar, ipContactPerson)
-      .input('ipContactTelephone', db.VarChar, ipContactTelephone)
-      .input('ipContactEmail', db.VarChar, ipContactEmail)
-      .query(`
-        INSERT INTO Ips (
-          ip_name,
-          ip_telephone,
-          ip_email_address,
-          ip_postal_address,
-          ip_physical_location,
-          ip_contact_person,
-          ip_contact_telephone,
-          ip_contact_email
-        ) VALUES (
-          @ipName,
-          @ipTelephone,
-          @ipEmailAddress,
-          @ipPostalAddress,
-          @ipPhysicalLocation,
-          @ipContactPerson,
-          @ipContactTelephone,
-          @ipContactEmail
-        )
-      `);
+    // Update the corresponding region to include this IP
+    await Region.findByIdAndUpdate(regionId, {
+      $push: { ips: savedIp._id }, // Add the new IP's ID to the region's ips array
+    });
 
-    // Return a success response
-    return new Response(
-      JSON.stringify({ message: 'IP added successfully' }),
-      { status: 201 }
-    );
-  } catch (err) {
-    console.error('Error adding IP:', err);
-    return new Response(
-      JSON.stringify({ message: 'Internal server error' }),
-      { status: 500 }
-    );
+    // Return the created IP record and confirmation of assignment
+    return NextResponse.json({ message: "IP created and assigned to region successfully", ip: savedIp }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ error: 'Error creating IP record', message: error.message }, { status: 500 });
   }
 }

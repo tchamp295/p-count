@@ -97,7 +97,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="">
+    <div className="  w-full">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

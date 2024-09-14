@@ -1,19 +1,17 @@
 import Navbar from "@/components/customui/navbar/Navbar";
 import Sidebar from "@/components/customui/sidebar/Sidebar";
-import { Toaster } from "react-hot-toast";
 
 const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Sidebar */}
-      <Sidebar />
+    <div className="w-full min-h-screen flex flex-col ">
+      <Navbar />
 
-      <div className="flex-1 lg:ml-64">
-        {/* Navbar */}
-        <Navbar />
-        <Toaster position="top-center" /> {/* Position the toaster globally */}
-        {/* Page content */}
-        <main className="flex-1 px-4 lg:px-6 pt-4 overflow-y-auto ">
+      <div className="flex  ">
+        <div className="hidden md:flex w-64">
+          <Sidebar />
+        </div>
+
+        <main className="w-full md:flex-1 px-4 lg:px-6 pt-4 overflow-hidden ">
           {children}
         </main>
       </div>

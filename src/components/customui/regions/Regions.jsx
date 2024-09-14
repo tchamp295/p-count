@@ -9,34 +9,34 @@ import { MdDeleteForever } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 
 // Reusable ConfirmationDialog component
-// Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-        <p className="text-sm mb-6">Are you sure you want to delete this IP?</p>
-        <div className="flex justify-end space-x-4">
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-            onClick={onConfirm}
-          >
-            Confirm
-          </button>
+    if (!isOpen) return null;
+  
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
+          <p className="text-sm mb-6">Are you sure you want to delete this Region?</p>
+          <div className="flex justify-end space-x-4">
+            <button
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              onClick={onConfirm}
+            >
+              Confirm
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
-const IpDataTable = () => {
+    );
+  };
+
+const RegionsData = () => {
   const getGridRowId = (row) => {
     return row["_id"];
   };
@@ -51,9 +51,9 @@ const IpDataTable = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const fetchData = async () => {
-    fetch("/api/ips").then((res) => {
-      res.json().then((ips) => {
-        setRows(ips);
+    fetch("/api/regions").then((res) => {
+      res.json().then((regions) => {
+        setRows(regions);
       });
     });
   };
@@ -82,7 +82,7 @@ const IpDataTable = () => {
     }
 
     try {
-      const response = await fetch(`/api/ips?id=${selectedRow._id}`, {
+      const response = await fetch(`/api/regions?id=${selectedRow._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const IpDataTable = () => {
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("Error deleting Ip: " + error.message);
+      setSnackbarMessage("Error deleting user: " + error.message);
       setSnackbarOpen(true);
     }
   };
@@ -117,44 +117,44 @@ const IpDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
- 
+
   const columns = [
-    { field: "ipName", headerName: "ipName", width: 150 },
-    { field: "ipTelephone", headerName: "ipTelephone", width: 150 },
-    { field: "ipEmailAddress", headerName: " ipEmailAddress", width: 150 },
-    { field: "ipPostalAddress", headerName: " ipPostalAddress", width: 150 },
-    { field: "ipPhysicalLocation", headerName: " ipPhysicalLocation", width: 150 },
-    { field: "ipContactPerson", headerName: " ipContactPerson", width: 150 },
-    { field: "ipContactTelephone", headerName: " ipContactTelephone", width: 150 },
-    { field: "ipContactEmail", headerName: " ipContactEmail", width: 150 },
+    { field: "regionName", headerName: "Region Name", width: 150 },
+    { field: "totalIps", headerName: "Total Ips", width: 200 }, // Updated field name
+    { field: "totalSfps", headerName: "Total SFP", width: 200 }, 
+  
     {
-      field: "actions",
-      headerName: "Actions",
-      width: 200,
-      renderCell: (params) => (
-        <div
-          className="flex items-center gap-1"
-        >
-          <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
-          <button className="  text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
-            <MdModeEdit className="mr-1" />
-            Edit
-          </button>
-        </Link>
-          <button className=" text-[#396b21]text-sm px-4 py-2 rounded-md flex items-center" onClick={() => handleDeleteClick(params.row)}>
-          <MdDeleteForever className="mr-1"/>
-            Delete
-        </button>
-        </div>
-      ),
-    },
+        field: "actions",
+        headerName: "Actions",
+        width: 200,
+        renderCell: (params) => (
+          <div className="flex items-center gap-2">
+            <Link href={`/admin/regions/${params.row._id}`}>
+            
+                <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none">
+                  <MdModeEdit className="mr-1" />
+                  Edit
+                </button>
+            
+            </Link>
+            <button
+              className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
+              onClick={() => handleDeleteClick(params.row)}
+            >
+              <MdDeleteForever className="mr-1" />
+              Delete
+            </button>
+          </div>
+        ),
+      }
+      
   ];
 
   return (
     <div className="w-full px-4">
       <div className="flex justify-between items-center pb-3 px-1">
-        <h3 className="">List of IPS</h3>
-        <Link href="/admin/ips-management/ips/create">
+        <h3 className="">Regions List</h3>
+        <Link href="/admin/ips-management/regions/create">
           <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
             <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
           </button>
@@ -206,4 +206,4 @@ const IpDataTable = () => {
   );
 };
 
-export default IpDataTable;
+export default RegionsData;

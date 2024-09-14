@@ -1,52 +1,29 @@
-// api/regions/add/route.js
-
-import { connectToDatabase } from '@/lib/dbConfig'; // Ensure this points to your correct dbConfig path
+import { NextResponse } from 'next/server';
+import { connectMongoDB } from '@/lib/mongoose';
+import { Region } from '@/models/region';
 
 export async function POST(req) {
-  // Parse the request body
-  const { regionName } = await req.json();
-
-  // Validate the input
-  if (!regionName) {
-    return new Response(JSON.stringify({ message: 'Region name is required' }), {
-      status: 400,
-    });
-  }
+  await connectMongoDB(); // Ensure the MongoDB connection is established
 
   try {
-    // Connect to the database
-    const db = await connectToDatabase();
-    const pool = await db.connect();
+    const { regionName } = await req.json();
 
-    // Check if the region already exists
-    const existingRegion = await pool
-      .request()
-      .input('regionName', db.VarChar, regionName)
-      .query('SELECT * FROM Regions WHERE region_name = @regionName');
-
-    if (existingRegion.recordset.length > 0) {
-      return new Response(
-        JSON.stringify({ message: 'Region already exists' }),
-        { status: 400 }
-      );
+    if (!regionName) {
+      return NextResponse.json({ message: 'Region name is required' }, { status: 400 });
     }
 
-    // Insert the new region into the database
-    await pool
-      .request()
-      .input('regionName', db.VarChar, regionName)
-      .query('INSERT INTO Regions (region_name) VALUES (@regionName)');
+    // Check if the region already exists
+    const existingRegion = await Region.findOne({ regionName });
+    if (existingRegion) {
+      return NextResponse.json({ message: 'Region already exists' }, { status: 409 });
+    }
 
-    // Return a success response
-    return new Response(
-      JSON.stringify({ message: 'Region added successfully' }),
-      { status: 201 }
-    );
-  } catch (err) {
-    console.error('Error adding region:', err);
-    return new Response(
-      JSON.stringify({ message: 'Internal server error' }),
-      { status: 500 }
-    );
+    // Create a new region
+    const newRegion = new Region({ regionName });
+    await newRegion.save();
+
+    return NextResponse.json({ message: 'Region added successfully!' }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Failed to create region', error: error.message }, { status: 500 });
   }
 }

@@ -1,27 +1,56 @@
-// pages/api/ips.js
+import { connectMongoDB } from "@/lib/mongoose";
+import { Ip } from "@/models/ip";
+import { Region } from "@/models/region";
+import { NextResponse } from "next/server";
 
-import { connectToDatabase } from '@/lib/dbConfig'; // Ensure this path is correct
+// GET: Fetch all IP records
+export async function GET() {
+  await connectMongoDB(); // Connect to the database
 
-export async function GET(req) {
   try {
-    // Connect to the database
-    const db = await connectToDatabase();
-    const pool = await db.connect();
-
-    // Fetch data from the 'ips' table
-    const result = await pool.request().query('SELECT * FROM ips');
-    console.log(result); // Optional: For debugging
-
-    // Return the data as a JSON response
-    return new Response(
-      JSON.stringify(result.recordset), 
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
-    );
-  } catch (err) {
-    console.error('Error fetching data:', err);
-    return new Response(
-      JSON.stringify({ message: 'Internal server error' }),
+    const ips = await Ip.find(); // Fetch all IP records
+    return NextResponse.json(ips, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error fetching IP records', message: error.message },
       { status: 500 }
     );
   }
 }
+
+
+
+
+export async function DELETE(req) {
+  const searchParams = req.nextUrl.searchParams;
+  const id = searchParams.get("id");
+
+  try {
+    // Connect to MongoDB
+    await connectMongoDB();
+
+    // Find and delete the IP record
+    const ip = await Ip.findByIdAndDelete(id);
+
+    if (!ip) {
+      return NextResponse.json({ message: "IP not found." }, { status: 404 });
+    }
+
+    // Detach IP from regions
+    await Region.updateMany(
+      { ips: id }, // Use the correct field name
+      { $pull: { ips: id } } // Remove IP ID from the array
+    );
+
+    return NextResponse.json(
+      { message: "IP deleted and detached from regions successfully" },
+      { status: 200 }
+    );
+  } catch (err) {
+    return NextResponse.json(
+      { message: "Failed to delete IP.", error: err.message },
+      { status: 500 }
+    );
+  }
+}
+

@@ -1,128 +1,30 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast';
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import LoginForm from "@/components/customui/login/LoginForm";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Login successful!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-
-        // Redirect to the admin panel if the user is an admin
-        router.push("/admin");
-      } else {
-        setError(data.message || "Login failed");
-        toast.error(data.message || "Login failed", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("An error occurred. Please try again.");
-      toast.error("An error occurred. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="w-full lg:grid lg:min-h-[400px] lg:grid-cols-2 xl:min-h-[800px]">
+    <div className="w-full lg:grid lg:min-h-[500px] lg:grid-cols-2 xl:min-h-[600px]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+              Enter your email  to login to your account
             </p>
           </div>
-          <form className="grid gap-4" onSubmit={handleSubmit}>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && <p className="text-red-500">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline">
-              Sign up
-            </Link>
-          </div>
+          <LoginForm />
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden lg:block lg:relative lg:overflow-hidden">
         <Image
-          src="/placeholder.svg"
+          src="/worrior.png"
           alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0"
           priority={true}
         />
       </div>
     </div>
   );
 }
-
