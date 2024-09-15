@@ -36,7 +36,8 @@ const LoginForm = () => {
         />
       </div>
       <div className="grid gap-2">
-       
+      <Label htmlFor="email">Password</Label>
+
         <Input
           id="password"
           type="password"

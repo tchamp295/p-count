@@ -159,15 +159,19 @@ export const register = async (previousState, formData) => {
 
   if (password !== confirmPassword) {
     return { error: "Passwords do not match" };
-    // throw new Error("Passwords do not match" );
   }
 
   try {
     await connectMongoDB();
 
-    const user = await User.findOne({ name });
+    // Check if the email or username already exists
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
+      return { error: "Email already registered" };
+    }
 
-    if (user) {
+    const existingUserByName = await User.findOne({ name });
+    if (existingUserByName) {
       return { error: "Username already exists" };
     }
 
@@ -182,13 +186,13 @@ export const register = async (previousState, formData) => {
       img,
       status
     });
-    // console.log(newUser);
+
     await newUser.save();
-    console.log("saved to db");
+    console.log("User saved to database");
 
     return { success: true };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return { error: "Something went wrong!" };
   }
 };
@@ -238,6 +242,7 @@ export const login = async (previousState, formData) => {
   const { email, password } = Object.fromEntries(formData);
   // console.log(username, password);
   try {
+    
     // console.log(username,password);
     const result = await signIn("credentials", { redirect: false, email, password });
 
@@ -257,6 +262,10 @@ export const login = async (previousState, formData) => {
     throw error;
   }
 };
+
+
+
+
 export const handleLogout = async () => {
   await signOut();
 };

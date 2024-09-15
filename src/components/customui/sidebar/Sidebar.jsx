@@ -2,9 +2,7 @@
 import { useState } from "react";
 import { navItems } from "@/utils/data";
 import NavItem from "./navitem/NavItem";
-import { Bell, Package2 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
 
 const Sidebar = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);

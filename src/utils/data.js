@@ -3,7 +3,6 @@ import {
   BarChart,
   Bell,
   Home,
-  Package2,
   Server,
   Settings,
   UserCheck,
@@ -58,8 +57,8 @@ export const navItems = [
     icon: <AlertTriangle />,
     title: "Advisories",
     links: [
-      { href: "/advisories/list", label: "Advisories" },
-      { href: "/advisories/types", label: "Advisory Types" },
+      { href: "/admin/advisory", label: "Advisories" },
+      { href: "/admin/advisoryCategory", label: "Advisory Categories" },
     ],
   },
   {

@@ -12,12 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 const AdminUserForm = () => {
   const [state, formAction] = useFormState(addUser, undefined);
+  const router = useRouter();
+
   if (state && state.error) {
-    toast.error(state.error); 
-} else if (state && state.success) {
-    toast.success("User created successfully!"); 
+    toast.error(state.error);
+  } else if (state && state.success) {
+    toast.success("User created successfully!");
+    router.push("/admin/user-management"); 
   }
 
   return (

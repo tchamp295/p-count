@@ -17,7 +17,7 @@ const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
         <p className="text-sm mb-6">
-          Are you sure you want to delete this User?
+          Are you sure you want to delete this Advisory?
         </p>
         <div className="flex justify-end space-x-4">
           <button
@@ -38,9 +38,9 @@ const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
   );
 };
 
-const AdminUsers = () => {
+const AdvisoryDataTable = () => {
   const getGridRowId = (row) => {
-    return row["_id"];
+    return row["id"];
   };
 
   const [rows, setRows] = useState([]);
@@ -53,11 +53,24 @@ const AdminUsers = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const fetchData = async () => {
-    fetch("/api/users").then((res) => {
-      res.json().then((users) => {
-        setRows(users);
-      });
-    });
+    try {
+      const res = await fetch("/api/advisory");
+      const data = await res.json();
+      console.log("Fetched Data:", data);
+
+      // Transform data to match the expected structure
+      const transformedRows = data.advisories.map((advisory) => ({
+        id: advisory._id,
+        description: advisory.description,
+        advisoryCategory: advisory.advisoryCategory
+          ? advisory.advisoryCategory.categoryName
+          : "No Category",
+      }));
+
+      setRows(transformedRows);
+    } catch (error) {
+      console.error("Failed to fetch advisories:", error);
+    }
   };
 
   useEffect(() => {
@@ -84,7 +97,7 @@ const AdminUsers = () => {
     }
 
     try {
-      const response = await fetch(`/api/users?id=${selectedRow._id}`, {
+      const response = await fetch(`/api/advisory?id=${selectedRow.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -121,35 +134,28 @@ const AdminUsers = () => {
   };
 
   const columns = [
-    { field: "name", headerName: "Full name", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "isAdmin",
-      headerName: "IsAdmin",
-      width: 150,
-      renderCell: (params) => (
-        <span>{params.value ? "Yes" : "No"}</span>
-      ),
-    },
-    { field: "status", headerName: "Status", width: 150 },
+    { field: "advisoryCategory", headerName: "Advisory Category", width: 200 },
+    { field: "description", headerName: "Description", width: 150 },
+
     {
       field: "actions",
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div
-          className="flex items-center gap-1"
-        >
-          <Link href={`/admin/user-management/${params.row._id}`}>
-          <button className="  text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
-            <MdModeEdit className="mr-1" />
-            Edit
-          </button>
-        </Link>
-          <button className=" text-[#396b21]text-sm px-4 py-2 rounded-md flex items-center" onClick={() => handleDeleteClick(params.row)}>
-          <MdDeleteForever className="mr-1"/>
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/regions/${params.row._id}`}>
+            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none">
+              <MdModeEdit className="mr-1" />
+              Edit
+            </button>
+          </Link>
+          <button
+            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
+            onClick={() => handleDeleteClick(params.row)}
+          >
+            <MdDeleteForever className="mr-1" />
             Delete
-        </button>
+          </button>
         </div>
       ),
     },
@@ -158,10 +164,11 @@ const AdminUsers = () => {
   return (
     <div className="w-full px-4">
       <div className="flex justify-between items-center pb-3 px-1">
-        <h3 className="">System Users</h3>
-        <Link href="/admin/user-management/create">
+        <h3 className="">Advisory List</h3>
+        <Link href="/admin/advisory/create">
           <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
-            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create
+            New
           </button>
         </Link>
       </div>
@@ -211,4 +218,4 @@ const AdminUsers = () => {
   );
 };
 
-export default AdminUsers;
+export default AdvisoryDataTable;

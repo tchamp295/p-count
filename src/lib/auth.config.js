@@ -3,6 +3,11 @@ export const authConfig = {
     signIn: "/login",
   },
   providers: [],
+  session: {
+    strategy: "jwt",
+    maxAge: 60, // 1 minute session expiration
+    updateAge: 30, // Session will be updated every 30 seconds
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

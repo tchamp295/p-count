@@ -37,7 +37,7 @@ const IpSchema = new mongoose.Schema(
     region: { // Add this field
       type: mongoose.Schema.Types.ObjectId,
       ref: "Region",
-      required: false, // Set to true if you want to make it required
+      required: true, // Set to true if you want to make it required
     },
   },
   { timestamps: true }

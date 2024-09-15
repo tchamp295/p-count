@@ -16,7 +16,7 @@ const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
           <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-          <p className="text-sm mb-6">Are you sure you want to delete this Region?</p>
+          <p className="text-sm mb-6">Are you sure you want to delete this SFPS?</p>
           <div className="flex justify-end space-x-4">
             <button
               className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
@@ -51,7 +51,7 @@ const SFPDataTable = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const fetchData = async () => {
-    fetch("/api/regions").then((res) => {
+    fetch("/api/sfps").then((res) => {
       res.json().then((regions) => {
         setRows(regions);
       });
@@ -82,7 +82,7 @@ const SFPDataTable = () => {
     }
 
     try {
-      const response = await fetch(`/api/regions?id=${selectedRow._id}`, {
+      const response = await fetch(`/api/sfps?id=${selectedRow._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -117,11 +117,14 @@ const SFPDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
+  
   const columns = [
-    { field: "regionName", headerName: "Region Name", width: 150 },
-    { field: "totalIps", headerName: "Total Ips", width: 200 }, // Updated field name
-    { field: "totalSfps", headerName: "Total SFP", width: 200 }, 
+    { field: " ipName", headerName: "ipName", width: 150 },
+    { field: "sfpName", headerName: "sfpName", width: 200 }, 
+    { field: "fpEmail", headerName: "fpEmail", width: 200 }, 
+    { field: "sfpTelephone", headerName: "sfpTelephone", width: 200 }, 
+    { field: "gender", headerName: "gender", width: 200 }, 
+    { field: "region", headerName: "Region", width: 200 }, 
   
     {
         field: "actions",
