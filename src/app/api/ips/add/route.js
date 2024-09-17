@@ -17,8 +17,17 @@ export async function POST(req) {
       ipContactPerson,
       ipContactTelephone,
       ipContactEmail,
-      regionId, // Add regionId in the request body
+      regionId, // The region ID to assign the IP to
     } = await req.json();
+
+    // Check if the region exists
+    const existingRegion = await Region.findById(regionId);
+    if (!existingRegion) {
+      return NextResponse.json(
+        { error: 'Region not found' },
+        { status: 404 }
+      );
+    }
 
     // Create new IP document
     const newIp = new Ip({
@@ -30,18 +39,25 @@ export async function POST(req) {
       ipContactPerson,
       ipContactTelephone,
       ipContactEmail,
+      region: regionId, // Reference to the region
     });
 
     const savedIp = await newIp.save(); // Save the new IP to MongoDB
 
     // Update the corresponding region to include this IP
-    await Region.findByIdAndUpdate(regionId, {
-      $push: { ips: savedIp._id }, // Add the new IP's ID to the region's ips array
-    });
+    existingRegion.ips.push(savedIp._id);
+    await existingRegion.save();
 
     // Return the created IP record and confirmation of assignment
-    return NextResponse.json({ message: "IP created and assigned to region successfully", ip: savedIp }, { status: 201 });
+    return NextResponse.json(
+      { message: "IP created and assigned to region successfully", ip: savedIp },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ error: 'Error creating IP record', message: error.message }, { status: 500 });
+    console.error(error);  // Log the full error to see what went wrong
+    return NextResponse.json(
+      { error: 'Error creating IP record', message: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -7,6 +7,7 @@ import {
   CheckCircle,
   Contact,
   Globe,
+  Loader,
   Shield,
   Users,
 } from "lucide-react";
@@ -14,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Barchart } from "./charts/Barchart";
 import { Piechart } from "./charts/Piechart";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const [notifications, setNotifications] = useState([
@@ -36,54 +38,52 @@ const Dashboard = () => {
       timestamp: "2024-08-25 09:45 AM",
     },
   ]);
-  const [ipCount, setIpCount] = useState(null);
-  const [sfpsCount, setSfpsCount] = useState(null);
-  const [regionCount, setRegionCount] = useState(null); // Add state for region count
 
+  const [totalIps, setTotalIps] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [totalRegions, setTotalRegions] = useState(0);
+  const [totalSfps, setTotalSfps] = useState(0); // State for total SFPs
   useEffect(() => {
-    const fetchIpCount = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("/api/ips/ip-count");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        const responses = await Promise.all([
+          fetch("/api/ips?type=count"),
+          fetch("/api/regions/total"),
+          fetch("/api/sfps/total"),
+        ]);
+
+        const [ipsResponse, regionsResponse, sfpsResponse] = responses;
+
+        if (!ipsResponse.ok) {
+          throw new Error(`Error fetching IPs: ${await ipsResponse.text()}`);
         }
-        const data = await response.json();
-        setIpCount(parseInt(data.count, 10));
+        if (!regionsResponse.ok) {
+          throw new Error(`Error fetching Regions: ${await regionsResponse.text()}`);
+        }
+        if (!sfpsResponse.ok) {
+          throw new Error(`Error fetching SFPs: ${await sfpsResponse.text()}`);
+        }
+
+        const [ipsData, regionsData, sfpsData] = await Promise.all([
+          ipsResponse.json(),
+          regionsResponse.json(),
+          sfpsResponse.json(),
+        ]);
+
+        setTotalIps(ipsData.count);
+        setTotalRegions(regionsData.count);
+        setTotalSfps(sfpsData.count);
+
       } catch (error) {
-        console.error("Error fetching IP count:", error);
+        toast.error(`Failed to load data: ${error.message}`);
+        console.error("Error fetching data:", error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchSfpsCount = async () => {
-      try {
-        const response = await fetch("/api/sfps/sfp-count");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setSfpsCount(parseInt(data.count, 10));
-      } catch (error) {
-        console.error("Error fetching SFPS count:", error);
-      }
-    };
-
-    const fetchRegionCount = async () => {
-      // Function to fetch the region count
-      try {
-        const response = await fetch("/api/regions/region-count");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setRegionCount(parseInt(data.count, 10));
-      } catch (error) {
-        console.error("Error fetching Region count:", error);
-      }
-    };
-
-    fetchIpCount();
-    fetchSfpsCount();
-    fetchRegionCount(); // Call the fetch function
+    fetchData();
   }, []);
 
   const markAsRead = (id) => {
@@ -105,11 +105,15 @@ const Dashboard = () => {
             <Globe className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {ipCount !== null ? (
-                ipCount
+            <div
+              className={`text-center font-bold ${
+                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
+              }`}
+            >
+              {loading ? (
+                <Loader className="animate-spin h-6 w-6 text-gray-500" />
               ) : (
-                <span className="text-sm">Loading...</span>
+                totalIps
               )}
             </div>
           </CardContent>
@@ -121,13 +125,17 @@ const Dashboard = () => {
             <Globe className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {regionCount !== null ? (
-                regionCount
+            <div
+              className={`text-center font-bold ${
+                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
+              }`}
+            >
+              {loading ? (
+                <Loader className="animate-spin h-6 w-6 text-gray-500" />
               ) : (
-                <span className="text-sm">Loading...</span>
+                totalRegions
               )}
-            </div>
+            </div>{" "}
           </CardContent>
         </Card>
 
@@ -137,13 +145,17 @@ const Dashboard = () => {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {sfpsCount !== null ? (
-                sfpsCount
+            <div
+              className={`text-center font-bold ${
+                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
+              }`}
+            >
+              {loading ? (
+                <Loader className="animate-spin h-6 w-6 text-gray-500" />
               ) : (
-                <span className="text-sm">Loading...</span>
+                totalSfps
               )}
-            </div>
+            </div>{" "}
           </CardContent>
         </Card>
         {/* Other Cards */}

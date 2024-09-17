@@ -9,10 +9,18 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react"; // For the loading spinner icon
 
 export default function Register() {
   const [state, formAction] = useFormState(register, undefined);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (event) => {
+    setLoading(true); // Start the loading spinner
+    // No need for event.target.submit() because the form action will handle submission automatically.
+  };
+
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +43,8 @@ export default function Register() {
           className="absolute inset-0 object-cover"
           priority={true}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div> {/* Overlay for image */}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
+        {/* Overlay for image */}
       </div>
 
       {/* Main Content Section */}
@@ -52,15 +61,20 @@ export default function Register() {
               className="w-20 h-20"
             />
           </div>
-          
+
           {/* Register Form Section */}
           <div className=" space-y-6">
             <div className="text-center space-y-6 ">
-            <h1 className="text-4xl font-extrabold text-gray-900">Sign Up</h1>
-            <p className="text-sm text-gray-600">
-              Enter the details below to register your account
-            </p></div>
-            <form action={formAction} className="space-y-4">
+              <h1 className="text-4xl font-extrabold text-gray-900">Sign Up</h1>
+              <p className="text-sm text-gray-600">
+                Enter the details below to register your account
+              </p>
+            </div>
+            <form
+              action={formAction}
+              className="space-y-4"
+              onSubmit={handleSubmit}
+            >
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <Input
@@ -84,7 +98,6 @@ export default function Register() {
               <div className="space-y-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  
                 </div>
                 <Input
                   id="password"
@@ -101,13 +114,24 @@ export default function Register() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Sign Up
+
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing up...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
             <div className="text-sm text-gray-500">
               Already have an account?{" "}
-              <Link href="/login" className="text-indigo-600 hover:text-indigo-500 underline">
+              <Link
+                href="/login"
+                className="text-indigo-600 hover:text-indigo-500 underline"
+              >
                 Sign In
               </Link>
             </div>

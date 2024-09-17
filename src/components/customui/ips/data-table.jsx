@@ -5,41 +5,12 @@ import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
-import { MdDeleteForever } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
+import { MdDeleteForever, MdModeEdit } from "react-icons/md";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 // Reusable ConfirmationDialog component
-// Reusable ConfirmationDialog component
-const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-        <p className="text-sm mb-6">Are you sure you want to delete this IP?</p>
-        <div className="flex justify-end space-x-4">
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-            onClick={onConfirm}
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 const IpDataTable = () => {
-  const getGridRowId = (row) => {
-    return row["_id"];
-  };
+  const getGridRowId = (row) => row["_id"];
 
   const [rows, setRows] = useState([]);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -51,11 +22,9 @@ const IpDataTable = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const fetchData = async () => {
-    fetch("/api/ips").then((res) => {
-      res.json().then((ips) => {
-        setRows(ips);
-      });
-    });
+    const response = await fetch("/api/ips");
+    const ips = await response.json();
+    setRows(ips);
   };
 
   useEffect(() => {
@@ -117,7 +86,7 @@ const IpDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
- 
+
   const columns = [
     { field: "ipName", headerName: "ipName", width: 150 },
     { field: "ipTelephone", headerName: "ipTelephone", width: 150 },
@@ -132,19 +101,20 @@ const IpDataTable = () => {
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div
-          className="flex items-center gap-1"
-        >
+        <div className="flex items-center gap-1">
           <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
-          <button className="  text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
-            <MdModeEdit className="mr-1" />
-            Edit
-          </button>
-        </Link>
-          <button className=" text-[#396b21]text-sm px-4 py-2 rounded-md flex items-center" onClick={() => handleDeleteClick(params.row)}>
-          <MdDeleteForever className="mr-1"/>
+            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
+              <MdModeEdit className="mr-1" />
+              Edit
+            </button>
+          </Link>
+          <button
+            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center"
+            onClick={() => handleDeleteClick(params.row)}
+          >
+            <MdDeleteForever className="mr-1" />
             Delete
-        </button>
+          </button>
         </div>
       ),
     },
@@ -196,12 +166,31 @@ const IpDataTable = () => {
         )}
       </div>
 
-      {/* Confirmation Dialog */}
-      <ConfirmationDialog
-        isOpen={isConfirmationOpen}
-        onCancel={handleConfirmationCancel}
-        onConfirm={handleConfirmationConfirm}
-      />
+      {/* ShadCN UI AlertDialog */}
+      <AlertDialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
+        <AlertDialogTrigger asChild>
+          {/* Trigger can be a hidden element or a button */}
+          <button className="hidden"></button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+          <p>Are you sure you want to delete this IP?</p>
+          <div className="flex justify-end space-x-4 mt-4">
+            <AlertDialogCancel
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+              onClick={handleConfirmationCancel}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              onClick={handleConfirmationConfirm}
+            >
+              Confirm
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

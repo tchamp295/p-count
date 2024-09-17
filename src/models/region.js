@@ -8,7 +8,8 @@ const RegionSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    ips: [{ type: mongoose.Schema.Types.ObjectId, ref: "Ip" }],
+    ips: [{ type: mongoose.Schema.Types.ObjectId, ref: "Ip" }], // References IPs belonging to this region
+    sfps: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sfp" }],
   },
   { timestamps: true }
 );

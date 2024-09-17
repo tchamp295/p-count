@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const IpSchema = new mongoose.Schema(
   {
@@ -34,11 +34,12 @@ const IpSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    region: { // Add this field
+    region: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Region",
-      required: true, // Set to true if you want to make it required
+      ref: "Region", // Region reference
+      required: true,
     },
+    sfps: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sfp" }],
   },
   { timestamps: true }
 );
