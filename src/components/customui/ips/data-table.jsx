@@ -88,14 +88,14 @@ const IpDataTable = () => {
   };
 
   const columns = [
-    { field: "ipName", headerName: "ipName", width: 150 },
-    { field: "ipTelephone", headerName: "ipTelephone", width: 150 },
-    { field: "ipEmailAddress", headerName: " ipEmailAddress", width: 150 },
-    { field: "ipPostalAddress", headerName: " ipPostalAddress", width: 150 },
-    { field: "ipPhysicalLocation", headerName: " ipPhysicalLocation", width: 150 },
-    { field: "ipContactPerson", headerName: " ipContactPerson", width: 150 },
-    { field: "ipContactTelephone", headerName: " ipContactTelephone", width: 150 },
-    { field: "ipContactEmail", headerName: " ipContactEmail", width: 150 },
+    { field: "ipName", headerName: "Ip Name", width: 150 },
+    { field: "ipTelephone", headerName: "Ip Telephone", width: 150 },
+    { field: "ipEmailAddress", headerName: " Ip EmailAddress", width: 150 },
+    { field: "ipPostalAddress", headerName: " Ip PostalAddress", width: 150 },
+    { field: "ipPhysicalLocation", headerName: " Ip PhysicalLocation", width: 150 },
+    { field: "ipContactPerson", headerName: " Ip ContactPerson", width: 150 },
+    { field: "ipContactTelephone", headerName: " Ip ContactTelephone", width: 150 },
+    { field: "ipContactEmail", headerName: " Ip ContactEmail", width: 150 },
     {
       field: "actions",
       headerName: "Actions",
