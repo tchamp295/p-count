@@ -7,6 +7,7 @@ import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
 const IpDataTable = () => {
@@ -162,7 +163,8 @@ const IpDataTable = () => {
             checkboxSelection
           />
         ) : (
-          <p className="">Loading...</p>
+          <LoadingSpinner />
+
         )}
       </div>
 

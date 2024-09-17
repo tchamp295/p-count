@@ -55,7 +55,7 @@ export function Piechart() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="text-base font-medium">SFPS Acknowledgement Analysis</CardTitle>
+        <CardTitle className="text-base font-normal ">SFPS Acknowledgement Analysis</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">

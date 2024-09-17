@@ -9,35 +9,38 @@ import { MdDeleteForever, MdVisibility } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import { Tooltip } from "@mui/material";
 import { Button } from "@/components/ui/button";
-import { Plus ,Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
+import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
-    if (!isOpen) return null;
-  
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-          <p className="text-sm mb-6">Are you sure you want to delete this SFPS?</p>
-          <div className="flex justify-end space-x-4">
-            <button
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              onClick={onConfirm}
-            >
-              Confirm
-            </button>
-          </div>
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
+        <p className="text-sm mb-6">
+          Are you sure you want to delete this SFPS?
+        </p>
+        <div className="flex justify-end space-x-4">
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            onClick={onConfirm}
+          >
+            Confirm
+          </button>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
 const SFPDataTable = () => {
   const getGridRowId = (row) => {
@@ -52,8 +55,6 @@ const SFPDataTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-
 
   const [loading, setLoading] = useState(false);
 
@@ -74,7 +75,7 @@ const SFPDataTable = () => {
       const res = await fetch("/api/sfps");
       const data = await res.json();
       console.log("Fetched Data:", data);
-  
+
       // Transform data to match the expected structure
       const transformedRows = data.map((sfp) => ({
         id: sfp._id,
@@ -85,13 +86,13 @@ const SFPDataTable = () => {
         gender: sfp.gender,
         regionName: sfp.region ? sfp.region.regionName : "No Region Name",
       }));
-  
+
       setRows(transformedRows);
     } catch (error) {
       console.error("Failed to fetch SFPs:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -151,7 +152,7 @@ const SFPDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-  
+
   const columns = [
     { field: "ipName", headerName: "IP Name", width: 150 },
     { field: "sfpName", headerName: "SFP Name", width: 200 },
@@ -159,60 +160,41 @@ const SFPDataTable = () => {
     { field: "sfpTelephone", headerName: "SFP Telephone", width: 200 },
     { field: "gender", headerName: "Gender", width: 200 },
     { field: "regionName", headerName: "Region Name", width: 200 },
-  
+
     {
       field: "actions",
       headerName: "Actions",
       width: 240, // Adjust width as needed
       renderCell: (params) => (
-        <div className="flex items-center gap-2">
-          {/* View Button */}
-          <Tooltip title="View" arrow>
-            <Link href={`/admin/regions/${params.row._id}`} passHref>
-              <button
-                className="text-[#1a202c] p-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
-                aria-label={`View ${params.row._id}`}
-              >
-                <MdVisibility className="text-blue-600" />
-              </button>
-            </Link>
-          </Tooltip>
-    
-          {/* Edit Button */}
-          <Tooltip title="Edit" arrow>
-            <Link href={`/admin/regions/${params.row._id}/edit`} passHref>
-              <button
-                className="text-[#1a202c] p-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
-                aria-label={`Edit ${params.row._id}`}
-              >
-                <MdModeEdit className="text-green-600" />
-              </button>
-            </Link>
-          </Tooltip>
-    
-          {/* Delete Button */}
-          <Tooltip title="Delete" arrow>
-            <button
-              className="text-[#1a202c] p-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
-              onClick={() => handleDeleteClick(params.row)}
-              aria-label={`Delete ${params.row._id}`}
-            >
-              <MdDeleteForever className="text-red-600" />
+        <div className="flex items-center gap-1">
+          <Link href={`/admin/ips-management/sfp${params.row._id}`}>
+            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
+              <MdModeEdit className="mr-1" />
+              Edit
             </button>
-          </Tooltip>
+          </Link>
+          <button
+            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center"
+            onClick={() => handleDeleteClick(params.row)}
+          >
+            <MdDeleteForever className="mr-1" />
+            Delete
+          </button>
         </div>
       ),
-    }
-      
+    },
   ];
 
   return (
     <div className="w-full px-4">
-      
       <div className="flex justify-between items-center pb-3 px-1">
         <h3 className="">Sfps List</h3>
         <Link href="/admin/ips-management/sfps/create">
-          <Button onClick={handleCreateNewClick} disabled={loading}>
+          <Button
+            onClick={handleCreateNewClick}
+            disabled={loading}
+            className="border bg-[#e5eadc] text-[#396b21]"
+          >
             {loading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
@@ -254,7 +236,7 @@ const SFPDataTable = () => {
             checkboxSelection
           />
         ) : (
-          <p className="">Loading...</p>
+          <LoadingSpinner />
         )}
       </div>
 

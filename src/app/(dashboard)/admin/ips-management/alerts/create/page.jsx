@@ -1,5 +1,7 @@
+import AlertsForm from "@/components/customui/alerts/AlertsForm";
+
 const AlertsPage = () => {
-  return ( <div className=""></div> );
+  return ( <AlertsForm/> );
 }
  
 export default AlertsPage;

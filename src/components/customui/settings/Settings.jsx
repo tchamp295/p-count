@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
+import { LoadingSpinner } from "@/utils/spinner";
 
 export default function Settings() {
   const [formData, setFormData] = useState({
@@ -79,7 +80,7 @@ export default function Settings() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return   <LoadingSpinner />;
   }
 
   if (error) {

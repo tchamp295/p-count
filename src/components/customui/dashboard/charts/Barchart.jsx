@@ -36,7 +36,7 @@ export function Barchart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-base font-normal ">
           SFPS Acknowledgement Analysis By Region
         </CardTitle>
         <div className="mt-4">

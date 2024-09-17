@@ -5,42 +5,13 @@ import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
-import { MdDeleteForever } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
+import { MdDeleteForever, MdModeEdit } from "react-icons/md";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
-const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
-    if (!isOpen) return null;
-  
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-          <p className="text-sm mb-6">Are you sure you want to delete this Advisory Category?</p>
-          <div className="flex justify-end space-x-4">
-            <button
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              onClick={onConfirm}
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-const AdvisoryCategoryDataTable = () => {
-  const getGridRowId = (row) => {
-    return row["_id"];
-  };
+const AlertsDataTable = () => {
+  const getGridRowId = (row) => row["_id"];
 
   const [rows, setRows] = useState([]);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -52,21 +23,10 @@ const AdvisoryCategoryDataTable = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const fetchData = async () => {
-    try {
-      const res = await fetch("/api/advisoryCategory");
-      const data = await res.json();
-  console.log(data);
-  
-      if (res.ok) {
-        setRows(data.categories); // Set the rows to the 'categories' array from the response
-      } else {
-        console.error("Failed to fetch advisory categories: ", data.message);
-      }
-    } catch (error) {
-      console.error("Error fetching advisory categories:", error);
-    }
+    const response = await fetch("/api/ips");
+    const ips = await response.json();
+    setRows(ips);
   };
-  
 
   useEffect(() => {
     fetchData();
@@ -92,7 +52,7 @@ const AdvisoryCategoryDataTable = () => {
     }
 
     try {
-      const response = await fetch(`/api/advisoryCategory?id=${selectedRow._id}`, {
+      const response = await fetch(`/api/ips?id=${selectedRow._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +71,7 @@ const AdvisoryCategoryDataTable = () => {
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("Error deleting user: " + error.message);
+      setSnackbarMessage("Error deleting Ip: " + error.message);
       setSnackbarOpen(true);
     }
   };
@@ -127,44 +87,45 @@ const AdvisoryCategoryDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-  
+
   const columns = [
-    { field: "categoryName", headerName: "Category", width: 150 },
-    { field: "desc", headerName: "Description", width: 200 }, 
-   
-  
+    { field: "ipName", headerName: "Ip Name", width: 150 },
+    { field: "ipTelephone", headerName: "Ip Telephone", width: 150 },
+    { field: "ipEmailAddress", headerName: " Ip EmailAddress", width: 150 },
+    { field: "ipPostalAddress", headerName: " Ip PostalAddress", width: 150 },
+    { field: "ipPhysicalLocation", headerName: " Ip PhysicalLocation", width: 150 },
+    { field: "ipContactPerson", headerName: " Ip ContactPerson", width: 150 },
+    { field: "ipContactTelephone", headerName: " Ip ContactTelephone", width: 150 },
+    { field: "ipContactEmail", headerName: " Ip ContactEmail", width: 150 },
     {
-        field: "actions",
-        headerName: "Actions",
-        width: 200,
-        renderCell: (params) => (
-          <div className="flex items-center gap-2">
-            <Link href={`/admin/regions/${params.row._id}`}>
-            
-                <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none">
-                  <MdModeEdit className="mr-1" />
-                  Edit
-                </button>
-            
-            </Link>
-            <button
-              className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
-              onClick={() => handleDeleteClick(params.row)}
-            >
-              <MdDeleteForever className="mr-1" />
-              Delete
+      field: "actions",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (params) => (
+        <div className="flex items-center gap-1">
+          <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
+            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
+              <MdModeEdit className="mr-1" />
+              Edit
             </button>
-          </div>
-        ),
-      }
-      
+          </Link>
+          <button
+            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center"
+            onClick={() => handleDeleteClick(params.row)}
+          >
+            <MdDeleteForever className="mr-1" />
+            Delete
+          </button>
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="w-full px-4">
       <div className="flex justify-between items-center pb-3 px-1">
-        <h3 className="">Advisory Category List</h3>
-        <Link href="/admin/advisoryCategory/create">
+        <h3 className="">List of IPS</h3>
+        <Link href="/admin/ips-management/alerts/create">
           <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
             <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
           </button>
@@ -203,18 +164,36 @@ const AdvisoryCategoryDataTable = () => {
           />
         ) : (
           <LoadingSpinner />
-          
         )}
       </div>
 
-      {/* Confirmation Dialog */}
-      <ConfirmationDialog
-        isOpen={isConfirmationOpen}
-        onCancel={handleConfirmationCancel}
-        onConfirm={handleConfirmationConfirm}
-      />
+      {/* ShadCN UI AlertDialog */}
+      <AlertDialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
+        <AlertDialogTrigger asChild>
+          {/* Trigger can be a hidden element or a button */}
+          <button className="hidden"></button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+          <p>Are you sure you want to delete this IP?</p>
+          <div className="flex justify-end space-x-4 mt-4">
+            <AlertDialogCancel
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+              onClick={handleConfirmationCancel}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              onClick={handleConfirmationConfirm}
+            >
+              Confirm
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
 
-export default AdvisoryCategoryDataTable;
+export default AlertsDataTable;

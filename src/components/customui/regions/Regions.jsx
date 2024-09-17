@@ -7,6 +7,7 @@ import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
+import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
@@ -192,7 +193,7 @@ const RegionsData = () => {
             checkboxSelection
           />
         ) : (
-          <p className="">Loading...</p>
+          <LoadingSpinner />
         )}
       </div>
 

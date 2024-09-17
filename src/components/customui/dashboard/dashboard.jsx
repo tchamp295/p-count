@@ -16,6 +16,7 @@ import { Barchart } from "./charts/Barchart";
 import { Piechart } from "./charts/Piechart";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { Skeleton } from "@/components/ui/skeleton"; // Import your skeleton component
 
 const Dashboard = () => {
   const [notifications, setNotifications] = useState([
@@ -43,6 +44,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [totalRegions, setTotalRegions] = useState(0);
   const [totalSfps, setTotalSfps] = useState(0); // State for total SFPs
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -96,155 +98,114 @@ const Dashboard = () => {
     );
   };
 
+  const SkeletonCard = () => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">
+          <Skeleton className="h-4 w-1/2" />
+        </CardTitle>
+        <Loader className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-center font-bold">
+          <Skeleton className="h-6 w-1/2 mx-auto" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
-    <div className="  w-full">
+    <div className="w-full">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total IPs</CardTitle>
-            <Globe className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div
-              className={`text-center font-bold ${
-                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
-              }`}
-            >
-              {loading ? (
-                <Loader className="animate-spin h-6 w-6 text-gray-500" />
-              ) : (
-                totalIps
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        {/* Region Count Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Regions</CardTitle>
-            <Globe className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div
-              className={`text-center font-bold ${
-                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
-              }`}
-            >
-              {loading ? (
-                <Loader className="animate-spin h-6 w-6 text-gray-500" />
-              ) : (
-                totalRegions
-              )}
-            </div>{" "}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total SFPS</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div
-              className={`text-center font-bold ${
-                loading ? "text-lg text-gray-500" : "text-3xl text-gray-900"
-              }`}
-            >
-              {loading ? (
-                <Loader className="animate-spin h-6 w-6 text-gray-500" />
-              ) : (
-                totalSfps
-              )}
-            </div>{" "}
-          </CardContent>
-        </Card>
-        {/* Other Cards */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Alerts</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Contacts
-            </CardTitle>
-            <Contact className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
+        {loading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total IPs</CardTitle>
+                <Globe className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-center font-bold text-lg text-gray-900">
+                  {totalIps}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Regions</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-center font-bold text-lg text-gray-900">
+                  {totalRegions}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total SFPS</CardTitle>
+                <Shield className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-center font-bold text-lg text-gray-900">
+                  {totalSfps}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
+                <AlertCircle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">0</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Alerts</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">0</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Contacts</CardTitle>
+                <Contact className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">0</div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
-
-      {/* Alerts Section */}
-      {/* <div className="mt-8">
-        <Card>
-          <CardHeader className="flex items-center justify-between pb-2">
-            <CardTitle className="text-lg font-medium">Notifications</CardTitle>
-            <Bell className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <ul>
-              {notifications.map((notification) => (
-                <li
-                  key={notification.id}
-                  className={`p-2 border-b ${
-                    notification.isRead ? "bg-gray-100" : "bg-red-100"
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span>{notification.message}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        {notification.timestamp}
-                      </span>
-                      {!notification.isRead && (
-                        <button
-                          className="text-green-600 hover:text-green-800"
-                          onClick={() => markAsRead(notification.id)}
-                        >
-                          <CheckCircle className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </div> */}
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
-          <h2 className="text-base font-medium mb-2">Region Analysis</h2>
+          <h2 className="text-base  mb-2">Region Analysis</h2>
           <Barchart
             title="SFPS Acknowledgement Analysis By Region"
             subtitle="Source: P-COUNT"
           />
         </div>
         <div>
-          <h2 className="text-base font-medium mb-2">SFP & Alert Analysis</h2>
+          <h2 className="text-base mb-2">SFP & Alert Analysis</h2>
           <Piechart
-            title="Alert Analysis & Stats"
-            subtitle="Source: All Departments"
+            title="Total SFPS"
+            subtitle="Source: P-COUNT"
           />
         </div>
       </div>

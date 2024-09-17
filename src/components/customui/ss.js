@@ -1,163 +1,255 @@
-import { navItems } from "@/utils/data";
-import NavItem from "./navitem/NavItem";
-import { Bell, Package2 } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-
-const Sidebar = () => {
-  return (
-    <div className="fixed top-0 left-0 w-64 h-screen border-r bg-muted/40 hidden lg:block">
-      <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-      <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Package2 className="h-6 w-6" />
-          <span className="">P-count</span>
-        </Link>
-        <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-          <Bell className="h-4 w-4" />
-          <span className="sr-only">Toggle notifications</span>
-        </Button>
-      </div>
-      <nav className="flex flex-col items-start px-4 py-2 text-sm font-medium">
-        {navItems.map((item, index) => (
-          <NavItem
-            key={index}
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            badgeCount={item.badgeCount}
-          />
-        ))}
-      </nav>
-    </div>
-  );
-};
-
-export default Sidebar;
-
-// "use client"
-
-// import { Bird, Rabbit, Turtle } from "lucide-react"
-
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
+// "use client";
 // import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select"
-// import { Textarea } from "@/components/ui/textarea"
+//   Activity,
+//   AlertCircle,
+//   AlertTriangle,
+//   Bell,
+//   CheckCircle,
+//   Contact,
+//   Globe,
+//   Loader,
+//   Shield,
+//   Users,
+// } from "lucide-react";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Barchart } from "./charts/Barchart";
+// import { Piechart } from "./charts/Piechart";
+// import { useState, useEffect } from "react";
+// import toast from "react-hot-toast";
+// import { Skeleton } from "@/components/ui/skeleton"; // Import your skeleton component
 
-// export default function Component() {
+// const Dashboard = () => {
+//   const [notifications, setNotifications] = useState([
+//     {
+//       id: 1,
+//       message: "New IP added.",
+//       isRead: false,
+//       timestamp: "2024-08-25 10:00 AM",
+//     },
+//     {
+//       id: 2,
+//       message: "System maintenance scheduled.",
+//       isRead: true,
+//       timestamp: "2024-08-24 9:00 PM",
+//     },
+//     {
+//       id: 3,
+//       message: "New alert from Nairobi region.",
+//       isRead: false,
+//       timestamp: "2024-08-25 09:45 AM",
+//     },
+//   ]);
+
+//   const [totalIps, setTotalIps] = useState(0);
+//   const [loading, setLoading] = useState(true);
+//   const [totalRegions, setTotalRegions] = useState(0);
+//   const [totalSfps, setTotalSfps] = useState(0); // State for total SFPs
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       setLoading(true);
+//       try {
+//         const responses = await Promise.all([
+//           fetch("/api/ips?type=count"),
+//           fetch("/api/regions/total"),
+//           fetch("/api/sfps/total"),
+//         ]);
+
+//         const [ipsResponse, regionsResponse, sfpsResponse] = responses;
+
+//         if (!ipsResponse.ok) {
+//           throw new Error(`Error fetching IPs: ${await ipsResponse.text()}`);
+//         }
+//         if (!regionsResponse.ok) {
+//           throw new Error(`Error fetching Regions: ${await regionsResponse.text()}`);
+//         }
+//         if (!sfpsResponse.ok) {
+//           throw new Error(`Error fetching SFPs: ${await sfpsResponse.text()}`);
+//         }
+
+//         const [ipsData, regionsData, sfpsData] = await Promise.all([
+//           ipsResponse.json(),
+//           regionsResponse.json(),
+//           sfpsResponse.json(),
+//         ]);
+
+//         setTotalIps(ipsData.count);
+//         setTotalRegions(regionsData.count);
+//         setTotalSfps(sfpsData.count);
+
+//       } catch (error) {
+//         toast.error(`Failed to load data: ${error.message}`);
+//         console.error("Error fetching data:", error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const markAsRead = (id) => {
+//     setNotifications(
+//       notifications.map((notification) =>
+//         notification.id === id
+//           ? { ...notification, isRead: true }
+//           : notification
+//       )
+//     );
+//   };
+
+//   const SkeletonCard = () => (
+//     <Card>
+//       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//         <CardTitle className="text-sm font-medium">
+//           <Skeleton className="h-4 w-1/2" />
+//         </CardTitle>
+//         <Globe className="h-4 w-4 text-muted-foreground" />
+//       </CardHeader>
+//       <CardContent>
+//         <div className="text-center font-bold">
+//           <Skeleton className="h-6 w-1/2 mx-auto" />
+//         </div>
+//       </CardContent>
+//     </Card>
+//   );
+
 //   return (
-//     <div
-//       className="relative hidden flex-col items-start gap-8 md:flex"
-//     >
-//       <form className="grid w-full items-start gap-6">
-//         <fieldset className="grid gap-6 rounded-lg border p-4">
-//           <legend className="-ml-1 px-1 text-sm font-medium">Settings</legend>
-//           <div className="grid gap-3">
-//             <Label htmlFor="model">Model</Label>
-//             <Select>
-//               <SelectTrigger
-//                 id="model"
-//                 className="items-start [&_[data-description]]:hidden"
-//               >
-//                 <SelectValue placeholder="Select a model" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="genesis">
-//                   <div className="flex items-start gap-3 text-muted-foreground">
-//                     <Rabbit className="size-5" />
-//                     <div className="grid gap-0.5">
-//                       <p>
-//                         Neural{" "}
-//                         <span className="font-medium text-foreground">
-//                           Genesis
-//                         </span>
-//                       </p>
-//                       <p className="text-xs" data-description>
-//                         Our fastest model for general use cases.
-//                       </p>
+//     <div className="w-full">
+//       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+//         {loading ? (
+//           <>
+//             <SkeletonCard />
+//             <SkeletonCard />
+//             <SkeletonCard />
+//             <SkeletonCard />
+//             <SkeletonCard />
+//             <SkeletonCard />
+//           </>
+//         ) : (
+//           <>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Total IPs</CardTitle>
+//                 <Globe className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-center font-bold text-lg text-gray-900">
+//                   {totalIps}
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Total Regions</CardTitle>
+//                 <Globe className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-center font-bold text-lg text-gray-900">
+//                   {totalRegions}
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Total SFPS</CardTitle>
+//                 <Shield className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-center font-bold text-lg text-gray-900">
+//                   {totalSfps}
+//                 </div>
+//               </CardContent>
+//             </Card>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
+//                 <AlertCircle className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-lg font-bold">0</div>
+//               </CardContent>
+//             </Card>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Total Alerts</CardTitle>
+//                 <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-lg font-bold">0</div>
+//               </CardContent>
+//             </Card>
+//             <Card>
+//               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                 <CardTitle className="text-sm font-medium">Total Contacts</CardTitle>
+//                 <Contact className="h-4 w-4 text-muted-foreground" />
+//               </CardHeader>
+//               <CardContent>
+//                 <div className="text-lg font-bold">0</div>
+//               </CardContent>
+//             </Card>
+//           </>
+//         )}
+//       </div>
+
+//       {/* Alerts Section */}
+//       {/* <div className="mt-8">
+//         <Card>
+//           <CardHeader className="flex items-center justify-between pb-2">
+//             <CardTitle className="text-lg font-medium">Notifications</CardTitle>
+//             <Bell className="h-5 w-5 text-muted-foreground" />
+//           </CardHeader>
+//           <CardContent>
+//             <ul>
+//               {notifications.map((notification) => (
+//                 <li
+//                   key={notification.id}
+//                   className={`p-2 border-b ${
+//                     notification.isRead ? "bg-gray-100" : "bg-red-100"
+//                   }`}
+//                 >
+//                   <div className="flex justify-between items-center">
+//                     <span>{notification.message}</span>
+//                     <div className="flex items-center gap-2">
+//                       <span className="text-xs text-muted-foreground">
+//                         {notification.timestamp}
+//                       </span>
+//                       {!notification.isRead && (
+//                         <button
+//                           className="text-green-600 hover:text-green-800"
+//                           onClick={() => markAsRead(notification.id)}
+//                         >
+//                           <CheckCircle className="h-4 w-4" />
+//                         </button>
+//                       )}
 //                     </div>
 //                   </div>
-//                 </SelectItem>
-//                 <SelectItem value="explorer">
-//                   <div className="flex items-start gap-3 text-muted-foreground">
-//                     <Bird className="size-5" />
-//                     <div className="grid gap-0.5">
-//                       <p>
-//                         Neural{" "}
-//                         <span className="font-medium text-foreground">
-//                           Explorer
-//                         </span>
-//                       </p>
-//                       <p className="text-xs" data-description>
-//                         Performance and speed for efficiency.
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </SelectItem>
-//                 <SelectItem value="quantum">
-//                   <div className="flex items-start gap-3 text-muted-foreground">
-//                     <Turtle className="size-5" />
-//                     <div className="grid gap-0.5">
-//                       <p>
-//                         Neural{" "}
-//                         <span className="font-medium text-foreground">
-//                           Quantum
-//                         </span>
-//                       </p>
-//                       <p className="text-xs" data-description>
-//                         The most powerful model for complex computations.
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//           <div className="grid gap-3">
-//             <Label htmlFor="temperature">Temperature</Label>
-//             <Input id="temperature" type="number" placeholder="0.4" />
-//           </div>
-//           <div className="grid grid-cols-2 gap-4">
-//             <div className="grid gap-3">
-//               <Label htmlFor="top-p">Top P</Label>
-//               <Input id="top-p" type="number" placeholder="0.7" />
-//             </div>
-//             <div className="grid gap-3">
-//               <Label htmlFor="top-k">Top K</Label>
-//               <Input id="top-k" type="number" placeholder="0.0" />
-//             </div>
-//           </div>
-//         </fieldset>
-//         <fieldset className="grid gap-6 rounded-lg border p-4">
-//           <legend className="-ml-1 px-1 text-sm font-medium">Messages</legend>
-//           <div className="grid gap-3">
-//             <Label htmlFor="role">Role</Label>
-//             <Select defaultValue="system">
-//               <SelectTrigger>
-//                 <SelectValue placeholder="Select a role" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="system">System</SelectItem>
-//                 <SelectItem value="user">User</SelectItem>
-//                 <SelectItem value="assistant">Assistant</SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//           <div className="grid gap-3">
-//             <Label htmlFor="content">Content</Label>
-//             <Textarea
-//               id="content"
-//               placeholder="You are a..."
-//               className="min-h-[9.5rem]"
-//             />
-//           </div>
-//         </fieldset>
-//       </form>
+//                 </li>
+//               ))}
+//             </ul>
+//           </CardContent>
+//         </Card>
+//       </div> */}
+
+//       {/* Charts Section */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+//         <div>
+//           <h2 className="text-base font-medium mb-2">Region Analysis</h2>
+//           <Barchart
+//             title="SFPS Acknowledgement Analysis By Region"
+//             subtitle="Source: P-COUNT"
+//           />
+//         </div>
+//         <div>
+//           <h2 className="text-base font-medium mb-2">SFP & Alert Analysis</h2>
+//           <Piechart
+//             title="Total SFPS"
+//             subtitle="Source: P-COUNT"
+//           />
+//         </div>
+//       </div>
 //     </div>
-//   )
-// }
+//   );
+// };
+
+// export default Dashboard;

@@ -31,26 +31,26 @@ export const navItems = [
     links: [
       { href: "/admin/ips-management/alerts/create", label: "Create New" },
       { href: "/admin/ips-management/alerts/active", label: "Active Alerts" },
-      { href: "/admin/ips-management/alerts/all", label: "All Alerts" },
+      { href: "/admin/ips-management/alerts", label: "All Alerts" },
     ],
   },
   {
     icon: <Users />,
     title: "Contacts",
     links: [
-      { href: "/contacts/list", label: "List of Contacts" },
-      { href: "/contacts/grouping", label: "Contact Grouping" },
+      { href: "/admin/contact-management/list", label: " Contacts List" },
+      { href: "/admin/contact-management/group", label: "Contact Grouping" },
     ],
   },
   {
     icon: <BarChart />,
     title: "Reports",
     links: [
-      { href: "/reports/alert", label: "Alert Reports" },
-      { href: "/reports/ip-alerts", label: "IP Alerts" },
-      { href: "/reports/contact-additions", label: "Contact Additions" },
-      { href: "/reports/sfp-activity", label: "SFP Activity Report" },
-      { href: "/reports/sfp-contact", label: "SFP Contact Report" },
+      { href: "/admin/stats/alerts", label: "Alert Reports" },
+      { href: "/admin/stats/ip-alerts", label: "IP Alerts" },
+      { href: "/admin/stats/contact-addition", label: "Contact Additions" },
+      { href: "/admin/stats//sfp-activity", label: "SFP Activity Report" },
+      { href: "/admin/stats//sfp-contact", label: "SFP Contact Report" },
     ],
   },
   {
@@ -58,14 +58,14 @@ export const navItems = [
     title: "Advisories",
     links: [
       { href: "/admin/advisory", label: "Advisories" },
-      { href: "/admin/advisoryCategory", label: "Advisory Categories" },
+      { href: "/admin/advisoryCategory", label: "Categories" },
     ],
   },
   {
     icon: <UserCheck />,
     title: "User Management",
     links: [
-      { href: "/admin/user-management", label: "System Users" },
+      { href: "/admin/user-management", label: "Users" },
     ],
   },
   {
