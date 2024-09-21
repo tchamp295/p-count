@@ -35,17 +35,18 @@ export default function Register() {
   return (
     <div className="relative flex flex-col lg:flex-row min-h-screen">
       {/* Background Image for Large Screens */}
-      <div className="hidden lg:block lg:w-1/2 lg:relative">
+      <div className="hidden lg:block lg:w-1/2 relative">
         <Image
           src="/worrior.png"
           alt="Background Image"
           fill
+          sizes="(max-width: 1024px) 100vw, 50vw"  // Adjust sizes based on screen width
           className="absolute inset-0 object-cover"
           priority={true}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>{" "}
-        {/* Overlay for image */}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div> {/* Overlay for image */}
       </div>
+
 
       {/* Main Content Section */}
       <div className="flex-1 flex items-center justify-center lg:w-1/2 p-4 bg-white">

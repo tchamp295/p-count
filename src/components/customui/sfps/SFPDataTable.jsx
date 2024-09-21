@@ -232,7 +232,7 @@ const SFPDataTable = () => {
             columns={columns}
             pageSize={5}
             getRowId={getGridRowId}
-            pageSizeOptions={[5]}
+            pageSizeOptions={[5, 10, 25, 100]}
             checkboxSelection
           />
         ) : (

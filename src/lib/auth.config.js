@@ -20,6 +20,8 @@ export const authConfig = {
       if (token) {
         session.user.id = token.id;
         session.user.isAdmin = token.isAdmin;
+        // console.log("Session updated:", session); // Debug log
+
       }
       return session;
     },

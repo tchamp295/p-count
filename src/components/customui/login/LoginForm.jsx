@@ -20,13 +20,24 @@ const LoginForm = () => {
     setLoading(true); // Start the loading spinner
     // No need for event.target.submit() because the form action will handle submission automatically.
   };
-
   useEffect(() => {
     if (state?.success) {
       toast.success("Login successful!");
-      router.push("/admin"); // Redirect to a protected route after login
+
+      // Ensure localStorage is available and check for stored redirect URL
+      if (typeof window !== "undefined") {
+        const redirectUrl = localStorage.getItem("redirectAfterLogin");
+        if (redirectUrl) {
+          localStorage.removeItem("redirectAfterLogin"); // Clear the stored URL after using it
+          router.push(redirectUrl); // Redirect to the stored URL
+        } else {
+          router.push("/admin"); // Fallback redirect
+        }
+      }
+      setLoading(false); // Set loading to false after successful login
     } else if (state?.error) {
       toast.error(state.error);
+      setLoading(false); // Set loading to false after login failure
     }
   }, [state?.success, state?.error, router]);
 

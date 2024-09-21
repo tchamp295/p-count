@@ -5,11 +5,12 @@ export default function SignIn() {
   return (
     <div className="relative flex flex-col lg:flex-row min-h-screen">
       {/* Background Image for Large Screens */}
-      <div className="hidden lg:block lg:w-1/2 lg:relative">
+      <div className="hidden lg:block lg:w-1/2 relative">
         <Image
           src="/worrior.png"
           alt="Background Image"
           fill
+          sizes="(max-width: 1024px) 100vw, 50vw"  // Adjust sizes based on screen width
           className="absolute inset-0 object-cover"
           priority={true}
         />
