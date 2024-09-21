@@ -1,128 +1,92 @@
-"use client"; // Ensure this is at the top for Next.js' App Router
-
-import { signOut, useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import { Label } from "@/components/ui/label";
+import { auth } from "@/lib/auth";
+import Image from "next/image";
 
-const UserSettingsPage = () => {
-  const { data: session, status } = useSession({ required: true }); // Ensure the session is required
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [img, setImg] = useState("");
- 
+const UserSettingsPage = async () => {
+  const session = await auth();
+  const { name, email, phone, img } = session.user; // Destructure values from session.user
 
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      setName(session.user.name || "");
-      setEmail(session.user.email || "");
-      setPhone(session.user.phone || "");
-      setImg(session.user.img || "");
-    }
-  }, [session, status]);
+  // console.log("vicky", session);
+  const { imageFile, imageURL,handleUpload, removeImage } = useImageUpload();
 
-
-  const handleUpdateProfile = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch("/api/update-profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success("Profile updated successfully!");
-        // Optionally, refresh session or reload user data
-      } else {
-        toast.error(result.error || "Failed to update profile");
-      }
-    } catch (error) {
-      toast.error("An error occurred while updating profile.");
-    }
-  };
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (status === "unauthenticated") {
-    return <div>Please log in to access your settings.</div>;
-  }
 
   return (
     <div className="relative flex flex-col items-start gap-8">
-      <form onSubmit={handleUpdateProfile} className="grid w-full items-start gap-6">
+      <form className="grid w-full items-start gap-6">
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">User Settings</legend>
+          <legend className="-ml-1 px-1 text-sm font-medium">
+            User Profile Settings
+          </legend>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Name Field */}
             <div className="grid gap-3">
-              <Label htmlFor="name" className="text-sm">Name</Label>
+              <Label htmlFor="name" className="text-sm">
+                Name
+              </Label>
               <Input
                 id="name"
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
               />
             </div>
 
             {/* Email Field */}
             <div className="grid gap-3">
-              <Label htmlFor="email" className="text-sm">Email</Label>
+              <Label htmlFor="email" className="text-sm">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled 
+                disabled
                 placeholder="Enter your email"
               />
             </div>
 
             {/* Phone Field */}
             <div className="grid gap-3">
-              <Label htmlFor="phone" className="text-sm">Phone</Label>
+              <Label htmlFor="phone" className="text-sm">
+                Phone
+              </Label>
               <Input
                 id="phone"
                 type="text"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter your phone number"
               />
             </div>
 
             {/* Image Field */}
+            {imageFile && (
             <div className="grid gap-3">
-              <Label htmlFor="img" className="text-sm">Profile Image URL</Label>
+              <Label htmlFor="img" className="text-sm">
+                Profile Image URL
+              </Label>
+              <Image src={imageFile} alt="Uploaded Image" width={150} height={150} />
+
               <Input
                 id="img"
                 type="text"
                 value={img}
-                onChange={(e) => setImg(e.target.value)}
                 placeholder="Enter image URL"
               />
+              <button onClick={removeImage} className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full">
+            Remove
+          </button>
             </div>
+   )}
 
-           
-
-           
-
+        
+      <ImageUpload onUpload={handleUpload} />
             {/* Submit Button */}
             <div className="col-span-3">
-              <Button type="submit">
-                Update Profile
-              </Button>
+              <Button type="submit">Update Profile</Button>
             </div>
           </div>
         </fieldset>
@@ -130,6 +94,5 @@ const UserSettingsPage = () => {
     </div>
   );
 };
-
 
 export default UserSettingsPage;
