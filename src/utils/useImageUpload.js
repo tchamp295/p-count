@@ -11,6 +11,7 @@
 // };
 
 // export default useImageUpload;
+"use client"
 import { useState } from "react";
 
 const useImageUpload = () => {

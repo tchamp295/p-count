@@ -3,15 +3,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import { Label } from "@/components/ui/label";
 import { auth } from "@/lib/auth";
-import Image from "next/image";
 
 const UserSettingsPage = async () => {
   const session = await auth();
   const { name, email, phone, img } = session.user; // Destructure values from session.user
 
-  // console.log("vicky", session);
-  const { imageFile, imageURL,handleUpload, removeImage } = useImageUpload();
-
+  console.log("vicky", session);
 
   return (
     <div className="relative flex flex-col items-start gap-8">
@@ -63,27 +60,18 @@ const UserSettingsPage = async () => {
             </div>
 
             {/* Image Field */}
-            {imageFile && (
             <div className="grid gap-3">
               <Label htmlFor="img" className="text-sm">
                 Profile Image URL
               </Label>
-              <Image src={imageFile} alt="Uploaded Image" width={150} height={150} />
-
               <Input
                 id="img"
                 type="text"
                 value={img}
                 placeholder="Enter image URL"
               />
-              <button onClick={removeImage} className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full">
-            Remove
-          </button>
             </div>
-   )}
 
-        
-      <ImageUpload onUpload={handleUpload} />
             {/* Submit Button */}
             <div className="col-span-3">
               <Button type="submit">Update Profile</Button>

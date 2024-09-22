@@ -10,6 +10,7 @@
 //   );
 // };
 // export default ImageUpload;
+
 import { CldUploadWidget } from "next-cloudinary";
 
 const ImageUpload = ({ onUpload }) => {
