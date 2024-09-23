@@ -6,57 +6,45 @@ import { signIn, signOut } from "./auth";
 import { AuthError } from "next-auth";
 import { User } from "@/models/user";
 
-// export const addProject = async (previousState, formData) => {
-//   const {
-//     title,
-//     desc,
-//     userId,
-//     img,
-//     gitUrl,
-//     previewUrl,
-//     tags,
-//   } = Object.fromEntries(formData);
-//   try {
-//     const tagArray = tags.split(",").map((tag) => tag.trim());
-//     await connectMongoDB();
-//     const newProject = new Project({
-//       title,
-//       desc,
-//       tags: tagArray,
-//       gitUrl,
-//       previewUrl,
-//       userId,
-//       img,
-//     });
-//     await newProject.save();
-//     console.log("saved to database");
-//     revalidatePath("/projects");
-//     revalidatePath("/admin");
-//   } catch (error) {
-//     console.log(error);
-//     return { error: "something went wrong" };
-//   }
-// };
-// export const addPost = async (previousState, formData) => {
-//   const { title, desc, slug, userId, img } = Object.fromEntries(formData);
-//   try {
-//     await connectMongoDB();
-//     const newPost = new Post({
-//       title: title,
-//       desc: desc,
-//       slug: slug,
-//       userId: userId,
-//       img,
-//     });
-//     await newPost.save();
-//     console.log("saved to database");
-//     revalidatePath("/blog");
-//     revalidatePath("/admin");
-//   } catch (error) {
-//     console.log(error);
-//     return { error: "something went wrong" };
-//   }
-// };
+export const UpdateProfile = async (previousState, formData, session) => {
+  const { name,email, phone, img, password } = Object.fromEntries(formData);
+
+  try {
+    await connectMongoDB();
+
+    // Find user by email from session
+    const user = await User.findOne({ email });
+    if (!user) {
+      const errorMessage = 'User not found';
+  console.error(errorMessage);
+
+  // Return error message so it can be handled on the client
+  return { error: errorMessage };
+    }
+
+    // Hash new password if provided
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    // Update user profile fields
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.img = img || user.img;
+
+    await user.save();
+    revalidatePath("/profile"); // Revalidate the profile page if needed
+
+    return { success: true }; // Indicate success
+  } catch (error) {
+    throw new Error(`Profile update failed: ${error.message}`);
+
+    return { error: "Something went wrong during profile update" };
+  }
+};
+
 export const addUser = async (previousState, formData) => {
   const { name, password, email, img,status, isAdmin } = Object.fromEntries(
     formData
@@ -238,7 +226,8 @@ export const register = async (previousState, formData) => {
 //   }
 // };
 
-export const login = async (previousState, formData) => {
+export const login = async (previousState, formData) => {    console.error('Profile update error:', error.message);
+
   const { email, password } = Object.fromEntries(formData);
   // console.log(username, password);
   try {
