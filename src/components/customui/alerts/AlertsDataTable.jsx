@@ -1,12 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
@@ -93,9 +100,17 @@ const AlertsDataTable = () => {
     { field: "ipTelephone", headerName: "Ip Telephone", width: 150 },
     { field: "ipEmailAddress", headerName: " Ip EmailAddress", width: 150 },
     { field: "ipPostalAddress", headerName: " Ip PostalAddress", width: 150 },
-    { field: "ipPhysicalLocation", headerName: " Ip PhysicalLocation", width: 150 },
+    {
+      field: "ipPhysicalLocation",
+      headerName: " Ip PhysicalLocation",
+      width: 150,
+    },
     { field: "ipContactPerson", headerName: " Ip ContactPerson", width: 150 },
-    { field: "ipContactTelephone", headerName: " Ip ContactTelephone", width: 150 },
+    {
+      field: "ipContactTelephone",
+      headerName: " Ip ContactTelephone",
+      width: 150,
+    },
     { field: "ipContactEmail", headerName: " Ip ContactEmail", width: 150 },
     {
       field: "actions",
@@ -127,7 +142,8 @@ const AlertsDataTable = () => {
         <h3 className="">List of IPS</h3>
         <Link href="/admin/ips-management/alerts/create">
           <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
-            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create
+            New
           </button>
         </Link>
       </div>
@@ -160,8 +176,8 @@ const AlertsDataTable = () => {
             pageSize={5}
             getRowId={getGridRowId}
             pageSizeOptions={[5, 10, 25, 100]}
-
             checkboxSelection
+            slots={{ toolbar: GridToolbar }}
           />
         ) : (
           <LoadingSpinner />
@@ -169,7 +185,10 @@ const AlertsDataTable = () => {
       </div>
 
       {/* ShadCN UI AlertDialog */}
-      <AlertDialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
+      <AlertDialog
+        open={isConfirmationOpen}
+        onOpenChange={setIsConfirmationOpen}
+      >
         <AlertDialogTrigger asChild>
           {/* Trigger can be a hidden element or a button */}
           <button className="hidden"></button>

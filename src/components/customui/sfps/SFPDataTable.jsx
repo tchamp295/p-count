@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -234,6 +234,8 @@ const SFPDataTable = () => {
             getRowId={getGridRowId}
             pageSizeOptions={[5, 10, 25, 100]}
             checkboxSelection
+            slots={{ toolbar: GridToolbar }}
+
           />
         ) : (
           <LoadingSpinner />

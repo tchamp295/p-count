@@ -7,7 +7,7 @@ import { AuthError } from "next-auth";
 import { User } from "@/models/user";
 
 export const UpdateProfile = async (previousState, formData, session) => {
-  const { name,email, phone, img, password } = Object.fromEntries(formData);
+  const { name, email, phone, img, password } = Object.fromEntries(formData);
 
   try {
     await connectMongoDB();
@@ -15,11 +15,11 @@ export const UpdateProfile = async (previousState, formData, session) => {
     // Find user by email from session
     const user = await User.findOne({ email });
     if (!user) {
-      const errorMessage = 'User not found';
-  console.error(errorMessage);
+      const errorMessage = "User not found";
+      console.error(errorMessage);
 
-  // Return error message so it can be handled on the client
-  return { error: errorMessage };
+      // Return error message so it can be handled on the client
+      return { error: errorMessage };
     }
 
     // Hash new password if provided
@@ -46,12 +46,10 @@ export const UpdateProfile = async (previousState, formData, session) => {
 };
 
 export const addUser = async (previousState, formData) => {
-  const { name, password, email, img,status, isAdmin } = Object.fromEntries(
-    formData
-  );
-  
+  const { name, password, email, img, status, isAdmin } =
+    Object.fromEntries(formData);
+
   try {
- 
     await connectMongoDB();
 
     const existingUser = await User.findOne({ email });
@@ -64,17 +62,15 @@ export const addUser = async (previousState, formData) => {
       img,
       password,
       isAdmin,
-      status
+      status,
     });
     await newUser.save();
     console.log("saved to database");
     revalidatePath("/admin");
     return { success: true }; // Return success status
-
   } catch (error) {
     console.log(error);
     return { error: "something went wrong" };
-
   }
 };
 // export const deleteProject = async (formData) => {
@@ -135,15 +131,8 @@ export const deleteUser = async (formData) => {
   }
 };
 export const register = async (previousState, formData) => {
-  const {
-    name,
-    email,
-    phone,
-    password,
-    img,
-    status,
-    confirmPassword,
-  } = Object.fromEntries(formData);
+  const { name, email, phone, password, img, status, confirmPassword } =
+    Object.fromEntries(formData);
 
   if (password !== confirmPassword) {
     return { error: "Passwords do not match" };
@@ -172,7 +161,7 @@ export const register = async (previousState, formData) => {
       phone,
       password: hashedPassword,
       img,
-      status
+      status,
     });
 
     await newUser.save();
@@ -226,14 +215,17 @@ export const register = async (previousState, formData) => {
 //   }
 // };
 
-export const login = async (previousState, formData) => {    console.error('Profile update error:', error.message);
+export const login = async (previousState, formData) => {
 
   const { email, password } = Object.fromEntries(formData);
   // console.log(username, password);
   try {
-    
     // console.log(username,password);
-    const result = await signIn("credentials", { redirect: false, email, password });
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
 
     console.log("logged in successfully");
     return { success: true };
@@ -251,9 +243,6 @@ export const login = async (previousState, formData) => {    console.error('Prof
     throw error;
   }
 };
-
-
-
 
 export const handleLogout = async () => {
   await signOut();
