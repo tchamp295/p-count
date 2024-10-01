@@ -2,26 +2,51 @@ import {
   AlertTriangle,
   BarChart,
   Bell,
-  Home,
-  Server,
+  LayoutGrid,
+  ListFilter,
+  MapPin,
   Settings,
   UserCheck,
+  UserPlus,
   Users,
+  UsersRound,
+  FolderOpen,
+  Globe,
+  ClipboardList,
+  PieChart,
+  ClipboardCheck,
+  UserCog,
+  Plus,
 } from "lucide-react";
 
 export const navItems = [
   {
     href: "/admin",
-    icon: <Home />,
+    icon: <LayoutGrid />,
     title: "Dashboard",
   },
   {
-    icon: <Server />,
-    title: "Ips Management",
+    icon: <UserPlus />,
+    title: "IPs",
     links: [
-      { href: "/admin/ips-management/ips", label: "List of IPs" },
-      { href: "/admin/ips-management/regions", label: "Regions" },
-      { href: "/admin/ips-management/sfps", label: "List of SFPS" },
+      { href: "/admin/ips", label: "IP List", icon: <ListFilter /> },
+      { href: "/admin/ips/create", label: "Add IP", icon: <Plus /> },
+    ],
+  },
+  {
+    icon: <MapPin />,
+    title: "Regions",
+    links: [
+      { href: "/admin/regions", label: "Region List", icon: <Globe /> },
+      { href: "/admin/regions/create", label: "Add Region", icon: <Plus /> },
+    ],
+  },
+  {
+    icon: <UsersRound />,
+    title: "SFPs",
+    links: [
+      { href: "/admin/sfps", label: "SFP List", icon: <ClipboardList /> },
+      { href: "/admin/sfps/create", label: "Add SFP", icon: <Plus /> },
     ],
   },
   {
@@ -29,43 +54,43 @@ export const navItems = [
     title: "Alerts",
     badgeCount: 6,
     links: [
-      { href: "/admin/ips-management/alerts/create", label: "Create New" },
-      { href: "/admin/ips-management/alerts/active", label: "Active Alerts" },
-      { href: "/admin/ips-management/alerts", label: "All Alerts" },
+      { href: "/admin/alerts/create", label: "Add Alert", icon: <Plus /> },
+      { href: "/admin/alerts/active", label: "Active Alerts", icon: <ClipboardCheck /> },
+      { href: "/admin/alerts", label: "All Alerts", icon: <FolderOpen /> },
     ],
   },
   {
     icon: <Users />,
     title: "Contacts",
     links: [
-      { href: "/admin/contact-management/list", label: " Contacts List" },
-      { href: "/admin/contact-management/group", label: "Contact Grouping" },
+      { href: "/admin/contacts/list", label: "Contact List", icon: <Users /> },
+      { href: "/admin/contacts/group", label: "Manage Groups", icon: <UserCog /> },
     ],
   },
   {
     icon: <BarChart />,
     title: "Reports",
     links: [
-      { href: "/admin/stats/alerts", label: "Alert Reports" },
-      { href: "/admin/stats/ip-alerts", label: "IP Alerts" },
-      { href: "/admin/stats/contact-addition", label: "Contact Additions" },
-      { href: "/admin/stats//sfp-activity", label: "SFP Activity Report" },
-      { href: "/admin/stats//sfp-contact", label: "SFP Contact Report" },
+      { href: "/admin/stats/alerts", label: "Alert Reports", icon: <PieChart /> },
+      { href: "/admin/stats/ip-alerts", label: "IP Reports", icon: <AlertTriangle /> },
+      { href: "/admin/stats/contact-addition", label: "New Contacts", icon: <Plus /> },
+      { href: "/admin/stats/sfp-activity", label: "SFP Activity", icon: <ClipboardList /> },
+      { href: "/admin/stats/sfp-contact", label: "SFP Contacts", icon: <ClipboardCheck /> },
     ],
   },
   {
     icon: <AlertTriangle />,
     title: "Advisories",
     links: [
-      { href: "/admin/advisory", label: "Advisories" },
-      { href: "/admin/advisoryCategory", label: "Categories" },
+      { href: "/admin/advisory", label: "Advisories List", icon: <FolderOpen /> },
+      { href: "/admin/advisory/category", label: "Manage Categories", icon: <ListFilter /> },
     ],
   },
   {
     icon: <UserCheck />,
-    title: "User Management",
+    title: "Admins",
     links: [
-      { href: "/admin/user-management", label: "Users" },
+      { href: "/admin/users", label: "Manage Admins", icon: <Users /> },
     ],
   },
   {

@@ -19,6 +19,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
+        matrix: "MatrixIIOT",
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       colors: {
@@ -55,7 +56,10 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "scroll-thumb": "#6b7280",
+        "scroll-track": "rgba(0, 0, 0, 0.1)",
       },
+     
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -77,5 +81,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
 };

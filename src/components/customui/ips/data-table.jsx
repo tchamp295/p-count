@@ -6,10 +6,16 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { LoadingSpinner } from "@/utils/spinner";
 
-// Reusable ConfirmationDialog component
 const IpDataTable = () => {
   const getGridRowId = (row) => row["_id"];
 
@@ -71,7 +77,7 @@ const IpDataTable = () => {
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("Error deleting Ip: " + error.message);
+      setSnackbarMessage("Error deleting IP: " + error.message);
       setSnackbarOpen(true);
     }
   };
@@ -89,28 +95,28 @@ const IpDataTable = () => {
   };
 
   const columns = [
-    { field: "ipName", headerName: "Ip Name", width: 150 },
-    { field: "ipTelephone", headerName: "Ip Telephone", width: 150 },
-    { field: "ipEmailAddress", headerName: " Ip EmailAddress", width: 150 },
-    { field: "ipPostalAddress", headerName: " Ip PostalAddress", width: 150 },
-    { field: "ipPhysicalLocation", headerName: " Ip PhysicalLocation", width: 150 },
-    { field: "ipContactPerson", headerName: " Ip ContactPerson", width: 150 },
-    { field: "ipContactTelephone", headerName: " Ip ContactTelephone", width: 150 },
-    { field: "ipContactEmail", headerName: " Ip ContactEmail", width: 150 },
+    { field: "ipName", headerName: "IP Name", width: 150 },
+    { field: "ipTelephone", headerName: "IP Telephone", width: 150 },
+    { field: "ipEmailAddress", headerName: "IP Email", width: 150 },
+    { field: "ipPostalAddress", headerName: "IP Postal Address", width: 150 },
+    { field: "ipPhysicalLocation", headerName: "IP Physical Location", width: 150 },
+    { field: "ipContactPerson", headerName: "IP Contact Person", width: 150 },
+    { field: "ipContactTelephone", headerName: "IP Contact Telephone", width: 150 },
+    { field: "ipContactEmail", headerName: "IP Contact Email", width: 150 },
     {
       field: "actions",
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
-            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
+            <button className="text-blue-600 hover:text-blue-800 text-sm px-3 py-1 rounded-md flex items-center transition-all duration-300 ease-in-out">
               <MdModeEdit className="mr-1" />
               Edit
             </button>
           </Link>
           <button
-            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center"
+            className="text-red-600 hover:text-red-800 text-sm px-3 py-1 rounded-md flex items-center transition-all duration-300 ease-in-out"
             onClick={() => handleDeleteClick(params.row)}
           >
             <MdDeleteForever className="mr-1" />
@@ -122,17 +128,17 @@ const IpDataTable = () => {
   ];
 
   return (
-    <div className="w-full px-4">
-      <div className="flex justify-between items-center pb-3 px-1">
-        <h3 className="">List of IPS</h3>
+    <div className="w-full p-4 bg-white shadow-lg rounded-lg">
+      <div className="flex justify-between items-center pb-4">
+        <h3 className="text-lg font-semibold text-gray-800">List of IPS</h3>
         <Link href="/admin/ips-management/ips/create">
-          <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
+          <button className="border border-gray-300 bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold hover:bg-[#d7d2c5]">
             <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
           </button>
         </Link>
       </div>
-      {successMessage && <div className="">{successMessage}</div>}
-      {errorMessage && <div className="">{errorMessage}</div>}
+      {successMessage && <div className="text-green-600">{successMessage}</div>}
+      {errorMessage && <div className="text-red-600">{errorMessage}</div>}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
@@ -152,7 +158,7 @@ const IpDataTable = () => {
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>
-      <div className="">
+      <div className="h-96">
         {rows.length > 0 ? (
           <DataGrid
             rows={rows}
@@ -160,21 +166,18 @@ const IpDataTable = () => {
             pageSize={5}
             getRowId={getGridRowId}
             pageSizeOptions={[5, 10, 25, 100]}
-
             checkboxSelection
             slots={{ toolbar: GridToolbar }}
-
+            className="bg-gray-50"
           />
         ) : (
           <LoadingSpinner />
-
         )}
       </div>
 
       {/* ShadCN UI AlertDialog */}
       <AlertDialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
         <AlertDialogTrigger asChild>
-          {/* Trigger can be a hidden element or a button */}
           <button className="hidden"></button>
         </AlertDialogTrigger>
         <AlertDialogContent>

@@ -4,9 +4,8 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { IoMdAdd } from "react-icons/io";
-import { MdDeleteForever } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
+import { PlusCircle } from "lucide-react"; // Importing Lucide icon
+import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
@@ -22,13 +21,13 @@ const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
         </p>
         <div className="flex justify-end space-x-4">
           <button
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition ease-in-out"
             onClick={onCancel}
           >
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition ease-in-out"
             onClick={onConfirm}
           >
             Confirm
@@ -40,13 +39,7 @@ const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
 };
 
 const AdminUsers = () => {
-  const getGridRowId = (row) => {
-    return row["_id"];
-  };
-
   const [rows, setRows] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -78,7 +71,6 @@ const AdminUsers = () => {
 
   const handleConfirmationConfirm = async () => {
     setIsConfirmationOpen(false);
-
     if (!selectedRow) {
       console.error("No selected row for deletion.");
       return;
@@ -96,7 +88,7 @@ const AdminUsers = () => {
       if (response.ok) {
         setSnackbarSeverity("success");
         setSnackbarMessage(data.message);
-        fetchData(); // Refresh the data after deletion
+        fetchData();
       } else {
         setSnackbarSeverity("error");
         setSnackbarMessage(data.message);
@@ -110,8 +102,6 @@ const AdminUsers = () => {
   };
 
   const clearMessages = () => {
-    setSuccessMessage(null);
-    setErrorMessage(null);
     setSnackbarMessage("");
     setSnackbarSeverity("success");
     setSnackbarOpen(false);
@@ -128,9 +118,7 @@ const AdminUsers = () => {
       field: "isAdmin",
       headerName: "IsAdmin",
       width: 150,
-      renderCell: (params) => (
-        <span>{params.value ? "Yes" : "No"}</span>
-      ),
+      renderCell: (params) => <span>{params.value ? "Yes" : "No"}</span>,
     },
     { field: "status", headerName: "Status", width: 150 },
     {
@@ -138,46 +126,43 @@ const AdminUsers = () => {
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div
-          className="flex items-center gap-1"
-        >
-          <Link href={`/admin/user-management/${params.row._id}`}>
-          <button className="  text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
-            <MdModeEdit className="mr-1" />
-            Edit
-          </button>
-        </Link>
-          <button className=" text-[#396b21]text-sm px-4 py-2 rounded-md flex items-center" onClick={() => handleDeleteClick(params.row)}>
-          <MdDeleteForever className="mr-1"/>
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/users/${params.row._id}`}>
+            <button className="text-primary flex items-center space-x-1 text-sm font-semibold px-3 py-2 bg-gray-100 rounded-md hover:bg-gray-200 transition ease-in-out">
+              <MdModeEdit className="mr-1" />
+              Edit
+            </button>
+          </Link>
+          <button
+            className="text-red-600 flex items-center space-x-1 text-sm font-semibold px-3 py-2 bg-red-50 rounded-md hover:bg-red-100 transition ease-in-out"
+            onClick={() => handleDeleteClick(params.row)}
+          >
+            <MdDeleteForever className="mr-1" />
             Delete
-        </button>
+          </button>
         </div>
-      ),
-    },
+      )
+    }
+    
   ];
 
   return (
-    <div className="w-full px-4">
-      <div className="flex justify-between items-center pb-3 px-1">
-        <h3 className="">System Users</h3>
-        <Link href="/admin/user-management/create">
-          <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
-            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+    <div className="w-full px-6 py-4 bg-white rounded-lg shadow-md">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-semibold text-gray-800">System Users</h3>
+        <Link href="/admin/users/create">
+          <button className="flex items-center px-4 py-2 bg-black text-white rounded-lg shadow-sm hover:bg-gray-800 transition ease-in-out">
+            <PlusCircle className="mr-2" />
+            Create New
           </button>
         </Link>
       </div>
-      {successMessage && <div className="">{successMessage}</div>}
-      {errorMessage && <div className="">{errorMessage}</div>}
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        style={{
-          position: "absolute",
-          top: "18%",
-          transform: "translateY(-50%)",
-        }}
       >
         <MuiAlert
           onClose={handleSnackbarClose}
@@ -187,24 +172,20 @@ const AdminUsers = () => {
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>
-      <div className="">
-        {rows.length > 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            getRowId={getGridRowId}
-            pageSizeOptions={[5, 10, 25, 100]}
 
-            checkboxSelection
-            slots={{ toolbar: GridToolbar }}
-
-
-          />
-        ) : (
-          <LoadingSpinner />
-        )}
-      </div>
+      {rows.length > 0 ? (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          checkboxSelection
+          getRowId={(row) => row._id}
+          components={{ Toolbar: GridToolbar }}
+          className="shadow-sm"
+        />
+      ) : (
+        <LoadingSpinner />
+      )}
 
       {/* Confirmation Dialog */}
       <ConfirmationDialog

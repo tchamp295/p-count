@@ -1,24 +1,15 @@
 "use client";
-import {
-  Activity,
-  AlertCircle,
-  AlertTriangle,
-  Bell,
-  CheckCircle,
-  Contact,
-  Globe,
-  Loader,
-  Shield,
-  Users,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Barchart } from "./charts/Barchart";
-import { Piechart } from "./charts/Piechart";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { Skeleton } from "@/components/ui/skeleton"; // Import your skeleton component
+import Skeleton from "@mui/material/Skeleton"; // Import MUI Skeleton
+import { Barchart } from "./charts/Barchart";
+import { Piechart } from "./charts/Piechart";
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [totalIps, setTotalIps] = useState(0);
+  const [totalRegions, setTotalRegions] = useState(0);
+  const [totalSfps, setTotalSfps] = useState(0); // State for total SFPs
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -40,11 +31,6 @@ const Dashboard = () => {
     },
   ]);
 
-  const [totalIps, setTotalIps] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [totalRegions, setTotalRegions] = useState(0);
-  const [totalSfps, setTotalSfps] = useState(0); // State for total SFPs
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -57,14 +43,8 @@ const Dashboard = () => {
 
         const [ipsResponse, regionsResponse, sfpsResponse] = responses;
 
-        if (!ipsResponse.ok) {
-          throw new Error(`Error fetching IPs: ${await ipsResponse.text()}`);
-        }
-        if (!regionsResponse.ok) {
-          throw new Error(`Error fetching Regions: ${await regionsResponse.text()}`);
-        }
-        if (!sfpsResponse.ok) {
-          throw new Error(`Error fetching SFPs: ${await sfpsResponse.text()}`);
+        if (!ipsResponse.ok || !regionsResponse.ok || !sfpsResponse.ok) {
+          throw new Error("Error fetching data");
         }
 
         const [ipsData, regionsData, sfpsData] = await Promise.all([
@@ -76,10 +56,8 @@ const Dashboard = () => {
         setTotalIps(ipsData.count);
         setTotalRegions(regionsData.count);
         setTotalSfps(sfpsData.count);
-
       } catch (error) {
         toast.error(`Failed to load data: ${error.message}`);
-        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -99,103 +77,104 @@ const Dashboard = () => {
   };
 
   const SkeletonCard = () => (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
-          <Skeleton className="h-4 w-1/2" />
-        </CardTitle>
-        <Loader className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-center font-bold">
-          <Skeleton className="h-6 w-1/2 mx-auto" />
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-gradient-to-br from-gray-100 to-gray-50  p-4 rounded-sm transition-all duration-300 hover:scale-105">
+      <div className="pb-1 text-center">
+        <Skeleton variant="text" width="50%" height={10}  style={{ margin: "0 auto" }} />
+      </div>
+      <div className="text-center font-semibold">
+        <Skeleton variant="rectangular" width="50%" height={40} style={{ margin: "0 auto" }} />
+      </div>
+    </div>
   );
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-        {loading ? (
-          <>
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </>
-        ) : (
-          <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total IPs</CardTitle>
-                <Globe className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-center font-bold text-lg text-gray-900">
-                  {totalIps}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Regions</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-center font-bold text-lg text-gray-900">
-                  {totalRegions}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total SFPS</CardTitle>
-                <Shield className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-center font-bold text-lg text-gray-900">
-                  {totalSfps}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-                <AlertCircle className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-bold">0</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Alerts</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-bold">0</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Contacts</CardTitle>
-                <Contact className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg font-bold">0</div>
-              </CardContent>
-            </Card>
-          </>
-        )}
+    <div className="w-full p-4">
+     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+  {loading ? (
+    <>
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+    </>
+  ) : (
+    <>
+      <div className="bg-gradient-to-br from-indigo-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">IPS</h3>
+        <div className="text-center font-extrabold text-lg text-indigo-700">
+          {totalIps}
+        </div>
+        <div className="text-center mt-1">
+          <a href="/admin/ips" className="text-indigo-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
       </div>
+
+      <div className="bg-gradient-to-br from-teal-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">Regions </h3>
+        <div className="text-center font-extrabold text-lg text-teal-700">
+          {totalRegions}
+        </div>
+        <div className="text-center mt-1">
+          <a href="/admin/regions" className="text-teal-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-br from-yellow-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">Total SFP </h3>
+        <div className="text-center font-extrabold text-lg text-yellow-700">
+          {totalSfps}
+        </div>
+        <div className="text-center mt-1">
+          <a href="/admin/sfps" className="text-yellow-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-br from-pink-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">Active Alerts</h3>
+        <div className="text-lg font-extrabold text-center text-pink-700">0</div>
+        <div className="text-center mt-1">
+          <a href="/admin/alerts/activ" className="text-pink-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-br from-red-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">All Alerts</h3>
+        <div className="text-lg font-extrabold text-center text-red-700">0</div>
+        <div className="text-center mt-1">
+          <a href="/admin/total-alerts" className="text-red-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-br from-green-100 to-white shadow-md p-2 rounded-lg transition-all duration-300 hover:scale-105">
+        <h3 className="text-base font-semibold text-center">Contacts</h3>
+        <div className="text-lg font-extrabold text-center text-green-700">0</div>
+        <div className="text-center mt-1">
+          <a href="/admin/contacts" className="text-green-600 hover:underline text-sm">
+            View details
+          </a>
+        </div>
+      </div>
+    </>
+  )}
+</div>
+
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
-          <h2 className="text-base  mb-2">Region Analysis</h2>
+          <h2 className="text-base mb-2">Region Analysis</h2>
           <Barchart
             title="SFPS Acknowledgement Analysis By Region"
             subtitle="Source: P-COUNT"

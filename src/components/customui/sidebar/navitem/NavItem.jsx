@@ -37,13 +37,11 @@ const NavItem = ({
         href={href}
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-all w-full",
-          isActive
-            ? "bg-muted text-primary"
-            : "text-muted-foreground hover:text-primary"
+          isActive ? "bg-muted text-white" : "text-slate-50 hover:text-red-500"
         )}
       >
-        <span className="flex items-center h-4 w-4">{icon}</span>
-        {title}
+        <span className="flex items-center text-blue-600 h-5 w-5">{icon}</span>
+        <span className="text-base font-medium text-slate-900">{title}</span>
         {badgeCount && (
           <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500 text-white">
             {badgeCount}
@@ -65,23 +63,31 @@ const NavItem = ({
       <AccordionItem value={title}>
         <AccordionTrigger
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 transition-all w-full",
+            "flex items-center gap-3 rounded-lg px-3 border-none py-2 transition-all w-full",
             isActive
               ? "bg-muted text-primary"
-              : "text-muted-foreground hover:text-primary"
+              : "text-muted-foreground group-hover:text-indigo-600"
           )}
         >
-          <span className="flex items-center h-4 w-4">{icon}</span>
-          {title}
-          <span className="ml-auto">{/* Arrow or indicator for collapse */}</span>
+          <span className="flex items-center text-blue-600 h-5 w-5">
+            {icon}
+          </span>
+          <span className="text-base  font-medium text-slate-900">{title}</span>
+          <span className="ml-auto">
+            {/* Arrow or indicator for collapse */}
+          </span>
         </AccordionTrigger>
-        <AccordionContent className="pl-6">
+        <AccordionContent className="pl-6  border-none  ">
           {links.map((link, index) => (
             <Link
               key={index}
               href={link.href}
-              className="block pl-4 py-2 text-muted-foreground hover:text-primary"
+              className="flex items-center text-sm gap-2 pl-4 py-2 text-slate-900 hover:text-primary"
             >
+              
+              <span className="flex items-center text-blue-600 h-3 w-3">
+                {link.icon}
+              </span>
               {link.label}
             </Link>
           ))}
