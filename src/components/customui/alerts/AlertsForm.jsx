@@ -21,6 +21,7 @@ import {
   Checkbox as MuiCheckbox,
   ListItemText,
   OutlinedInput,
+  TextareaAutosize,
 } from "@mui/material";
 
 const AlertsForm = () => {
@@ -144,22 +145,32 @@ const AlertsForm = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-start gap-8">
-      <form onSubmit={handleSubmit} className="grid w-full items-start gap-6">
+    <div className="relative shadow-md rounded bg-white p-4 flex flex-col items-start gap-8">
+      <form
+        onSubmit={handleSubmit}
+        className="grid w-full items-start gap-6 p-2"
+      >
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">
+          <legend className="-ml-1 px-1 text-sm font-medium text-customColor">
             Create New Alert
           </legend>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
             {/* IP Name Dropdown with Checkboxes */}
-            
-            <div className="grid gap-3">
+
+            <div className="grid gap-3 ">
               <Label htmlFor="ip-name" className="text-sm">
                 IP Name
               </Label>
               <FormControl variant="outlined">
-                <InputLabel id="ip-name-label">Select IP Name(s)</InputLabel>
+                <InputLabel
+                  id="ip-name-label"
+                  sx={{
+                    lineHeight: "normal",
+                  }}
+                >
+                  Select IP Name(s)
+                </InputLabel>
                 <MuiSelect
                   labelId="ip-name-label"
                   multiple
@@ -173,7 +184,14 @@ const AlertsForm = () => {
                     });
                     return selectedIpNames.join(", ");
                   }}
-                  disabled={selectedRegions.length > 0} // Disable if regions are selected
+                  disabled={selectedRegions.length > 0}
+                  sx={{
+                    padding: "6px 14px",
+                    height: "40px",
+                    ".MuiOutlinedInput-input": {
+                      padding: "6px 0px",
+                    },
+                  }}
                 >
                   {ipNames.map((ip) => (
                     <MenuItem key={ip._id} value={ip._id}>
@@ -186,12 +204,19 @@ const AlertsForm = () => {
             </div>
 
             {/* Region Dropdown with Checkboxes */}
-            <div className="grid gap-3">
+            <div className="grid gap-3 ">
               <Label htmlFor="region" className="text-sm">
                 Region
               </Label>
-              <FormControl variant="outlined">
-                <InputLabel id="region-label">Select Region(s)</InputLabel>
+              <FormControl variant="outlined" className="">
+                <InputLabel
+                  id="region-label"
+                  sx={{
+                    lineHeight: "normal",
+                  }}
+                >
+                  Select Region(s)
+                </InputLabel>
                 <MuiSelect
                   labelId="region-label"
                   multiple
@@ -207,7 +232,14 @@ const AlertsForm = () => {
                     });
                     return selectedRegionNames.join(", ");
                   }}
-                  disabled={selectedIPs.length > 0} // Disable if IPs are selected
+                  disabled={selectedIPs.length > 0}
+                  sx={{
+                    padding: "6px 14px",
+                    height: "40px",
+                    ".MuiOutlinedInput-input": {
+                      padding: "6px 0px",
+                    },
+                  }}
                 >
                   {regions.map((region) => (
                     <MenuItem key={region._id} value={region._id}>
@@ -221,24 +253,13 @@ const AlertsForm = () => {
               </FormControl>
             </div>
 
-            {/* Alert Description */}
-            <div className="grid gap-3">
-              <Label htmlFor="alert-description" className="text-sm">
-                Alert Description
-              </Label>
-              <Textarea
-                id="alert-description"
-                value={alertDescription}
-                onChange={(e) => setAlertDescription(e.target.value)}
-                placeholder="Enter alert description"
-              />
-            </div>
             {/* Alert Category */}
             <div className="grid gap-3">
               <Label htmlFor="alert-category" className="text-sm">
                 Alert Category
               </Label>
               <Select
+                className="outline-none "
                 id="alert-category"
                 value={alertCategory}
                 onValueChange={(value) => setAlertCategory(value)}
@@ -254,39 +275,62 @@ const AlertsForm = () => {
                 </SelectContent>
               </Select>
             </div>
-
+            {/* Alert Description */}
+            <div className="grid gap-3">
+              <Label htmlFor="alert-description" className="text-sm">
+                Alert Description
+              </Label>
+              <TextareaAutosize
+                id="alert-description"
+                value={alertDescription}
+                onChange={(e) => setAlertDescription(e.target.value)}
+                placeholder="Enter alert description"
+                minRows={3}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc", // Light gray border
+                  backgroundColor: "#f9f9f9", // Light background color for contrast
+                  color: "#333", // Darker text color for visibility
+                  borderRadius: "4px",
+                  outline: "none",
+                }}
+              />
+            </div>
             {/* Notification Preferences */}
-            <div className="grid gap-3 col-span-3">
-              <Label className="text-sm">Notifications</Label>
-              <div className="flex items-center gap-4">
-                <Checkbox
-                  id="sms"
-                  checked={isSms}
-                  onCheckedChange={() => setIsSms((prev) => !prev)}
-                />
-                <Label htmlFor="sms">SMS</Label>
+            <div className="">
+              <div className="grid gap-3 col-span-1">
+                <Label className="text-sm">Notifications</Label>
+                <div className="flex items-center gap-4">
+                  <Checkbox
+                    id="sms"
+                    checked={isSms}
+                    onCheckedChange={() => setIsSms((prev) => !prev)}
+                  />
+                  <Label htmlFor="sms">SMS</Label>
 
-                <Checkbox
-                  id="http-push"
-                  checked={isHttpPush}
-                  onCheckedChange={() => setIsHttpPush((prev) => !prev)}
-                />
-                <Label htmlFor="http-push">HTTP Push</Label>
+                  <Checkbox
+                    id="http-push"
+                    checked={isHttpPush}
+                    onCheckedChange={() => setIsHttpPush((prev) => !prev)}
+                  />
+                  <Label htmlFor="http-push">HTTP Push</Label>
 
-                <Checkbox
-                  id="email"
-                  checked={isEmail}
-                  onCheckedChange={() => setIsEmail((prev) => !prev)}
-                />
-                <Label htmlFor="email">Email</Label>
+                  <Checkbox
+                    id="email"
+                    checked={isEmail}
+                    onCheckedChange={() => setIsEmail((prev) => !prev)}
+                  />
+                  <Label htmlFor="email">Email</Label>
+                </div>
               </div>
             </div>
 
             {/* Submit Button */}
-            <div className="col-span-3">
+            <div className="col-span-3 pl-2 mt-10">
               <Button
                 type="submit"
-                className="mt-4 bg-purple-400 hover:bg-purple-500"
+                className=" text-white  bg-customColor hover:bg-customColor hover:shadow-lg px-4 py-2 text-sm"
               >
                 Create
               </Button>

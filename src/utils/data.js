@@ -54,8 +54,8 @@ export const navItems = [
     title: "Alerts",
     badgeCount: 6,
     links: [
-      { href: "/admin/alerts/create", label: "Add Alert", icon: <Plus /> },
-      { href: "/admin/alerts/active", label: "Active Alerts", icon: <ClipboardCheck /> },
+      { href: "/admin/alerts/create", label: "New Alert", icon: <Plus /> },
+      { href: "/admin/alerts/active", label: "Active", icon: <ClipboardCheck /> },
       { href: "/admin/alerts", label: "All Alerts", icon: <FolderOpen /> },
     ],
   },
@@ -64,7 +64,7 @@ export const navItems = [
     title: "Contacts",
     links: [
       { href: "/admin/contacts/list", label: "Contact List", icon: <Users /> },
-      { href: "/admin/contacts/group", label: "Manage Groups", icon: <UserCog /> },
+      { href: "/admin/contacts/group", label: "Groups", icon: <UserCog /> },
     ],
   },
   {
@@ -82,15 +82,16 @@ export const navItems = [
     icon: <AlertTriangle />,
     title: "Advisories",
     links: [
-      { href: "/admin/advisory", label: "Advisories List", icon: <FolderOpen /> },
-      { href: "/admin/advisory/category", label: "Manage Categories", icon: <ListFilter /> },
+      { href: "/admin/advisory", label: "Advisory List", icon: <FolderOpen /> },
+      { href: "/admin/advisory/category", label: "Categories", icon: <ListFilter /> },
     ],
   },
   {
     icon: <UserCheck />,
     title: "Admins",
     links: [
-      { href: "/admin/users", label: "Manage Admins", icon: <Users /> },
+      { href: "/admin/users", label: "Admins", icon: <Users /> },
+      { href: "/admin/users/create", label: "Add Admin", icon: <UserPlus /> },
     ],
   },
   {

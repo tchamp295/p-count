@@ -4,9 +4,10 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { PlusCircle } from "lucide-react"; // Importing Lucide icon
+import { Plus, PlusCircle, Trash2, UserPen } from "lucide-react"; // Importing Lucide icon
 import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import { LoadingSpinner } from "@/utils/spinner";
+import { Tooltip } from "@mui/material";
 
 // Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
@@ -45,11 +46,13 @@ const AdminUsers = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     fetch("/api/users").then((res) => {
       res.json().then((users) => {
         setRows(users);
+        setLoading(false)
       });
     });
   };
@@ -110,6 +113,11 @@ const AdminUsers = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+  if (loading) {
+    return   <LoadingSpinner />;
+  }
+
+ 
 
   const columns = [
     { field: "name", headerName: "Full name", width: 150 },
@@ -126,34 +134,36 @@ const AdminUsers = () => {
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div className="flex items-center gap-2">
-          <Link href={`/admin/users/${params.row._id}`}>
-            <button className="text-primary flex items-center space-x-1 text-sm font-semibold px-3 py-2 bg-gray-100 rounded-md hover:bg-gray-200 transition ease-in-out">
-              <MdModeEdit className="mr-1" />
-              Edit
+        <div className="flex items-center mt-2 gap-2">
+          <Tooltip title="Edit User" arrow>
+            <Link href={`/admin/users/${params.row._id}`}>
+              <button className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out">
+                <UserPen className="text-teal-400" size={18} />
+              </button>
+            </Link>
+          </Tooltip>
+
+          <Tooltip title="Delete User" arrow>
+            <button
+              className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
+              onClick={() => handleDeleteClick(params.row)}
+            >
+              <Trash2 className="text-red-600" size={18} />
             </button>
-          </Link>
-          <button
-            className="text-red-600 flex items-center space-x-1 text-sm font-semibold px-3 py-2 bg-red-50 rounded-md hover:bg-red-100 transition ease-in-out"
-            onClick={() => handleDeleteClick(params.row)}
-          >
-            <MdDeleteForever className="mr-1" />
-            Delete
-          </button>
+          </Tooltip>
         </div>
-      )
-    }
-    
+      ),
+    },
   ];
 
   return (
     <div className="w-full px-6 py-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">System Users</h3>
+        <h3 className="text-base font-robotoFlex font-medium">System Users</h3>
         <Link href="/admin/users/create">
-          <button className="flex items-center px-4 py-2 bg-black text-white rounded-lg shadow-sm hover:bg-gray-800 transition ease-in-out">
-            <PlusCircle className="mr-2" />
-            Create New
+          <button className="flex items-center px-2 py-2 border border-teal-500 text-teal-500 hover:bg-green-50 hover:border-teal-600 hover:text-teal-600 rounded-md text-sm font-medium shadow-sm transition ease-in-out duration-300">
+            <Plus height={20} width={20} className="mr-2" />
+            Create User
           </button>
         </Link>
       </div>
@@ -173,7 +183,7 @@ const AdminUsers = () => {
         </MuiAlert>
       </Snackbar>
 
-      {rows.length > 0 ? (
+     
         <DataGrid
           rows={rows}
           columns={columns}
@@ -183,9 +193,7 @@ const AdminUsers = () => {
           components={{ Toolbar: GridToolbar }}
           className="shadow-sm"
         />
-      ) : (
-        <LoadingSpinner />
-      )}
+      
 
       {/* Confirmation Dialog */}
       <ConfirmationDialog

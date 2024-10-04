@@ -21,8 +21,15 @@ module.exports = {
       fontFamily: {
         matrix: "MatrixIIOT",
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        oleo: ['"Oleo Script"', "cursive"],
+        dmSans: ['"DM Sans"', "sans-serif"],
+        quicksand: ['"Quicksand"', "sans-serif"],
+        pacifico: ['"Pacifico"', "cursive"],
+        specialElite: ['"Special Elite"', "monospace"],
+        robotoFlex: ['"Roboto Flex"', "sans-serif"],
       },
       colors: {
+        customColor: "#4B49AC",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -59,7 +66,7 @@ module.exports = {
         "scroll-thumb": "#6b7280",
         "scroll-track": "rgba(0, 0, 0, 0.1)",
       },
-     
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

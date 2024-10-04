@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import Skeleton from "@mui/material/Skeleton"; // Import MUI Skeleton
 import { Barchart } from "./charts/Barchart";
 import { Piechart } from "./charts/Piechart";
+import { Separator } from "@/components/ui/separator";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -88,7 +89,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 font-dmSans">
      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
   {loading ? (
     <>
@@ -107,8 +108,8 @@ const Dashboard = () => {
           {totalIps}
         </div>
         <div className="text-center mt-1">
-          <a href="/admin/ips" className="text-indigo-600 hover:underline text-sm">
-            View details
+          <a href="/admin/ips" className="text-indigo-600  hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -119,8 +120,8 @@ const Dashboard = () => {
           {totalRegions}
         </div>
         <div className="text-center mt-1">
-          <a href="/admin/regions" className="text-teal-600 hover:underline text-sm">
-            View details
+          <a href="/admin/regions" className="text-teal-600 hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -131,8 +132,8 @@ const Dashboard = () => {
           {totalSfps}
         </div>
         <div className="text-center mt-1">
-          <a href="/admin/sfps" className="text-yellow-600 hover:underline text-sm">
-            View details
+          <a href="/admin/sfps" className="text-yellow-600 hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -141,8 +142,8 @@ const Dashboard = () => {
         <h3 className="text-base font-semibold text-center">Active Alerts</h3>
         <div className="text-lg font-extrabold text-center text-pink-700">0</div>
         <div className="text-center mt-1">
-          <a href="/admin/alerts/activ" className="text-pink-600 hover:underline text-sm">
-            View details
+          <a href="/admin/alerts/activ" className="text-pink-600 hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -151,8 +152,8 @@ const Dashboard = () => {
         <h3 className="text-base font-semibold text-center">All Alerts</h3>
         <div className="text-lg font-extrabold text-center text-red-700">0</div>
         <div className="text-center mt-1">
-          <a href="/admin/total-alerts" className="text-red-600 hover:underline text-sm">
-            View details
+          <a href="/admin/total-alerts" className="text-red-600 hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -161,8 +162,8 @@ const Dashboard = () => {
         <h3 className="text-base font-semibold text-center">Contacts</h3>
         <div className="text-lg font-extrabold text-center text-green-700">0</div>
         <div className="text-center mt-1">
-          <a href="/admin/contacts" className="text-green-600 hover:underline text-sm">
-            View details
+          <a href="/admin/contacts" className="text-green-600 hover:underline text-sm font-oleo font-thin">
+            View details...
           </a>
         </div>
       </div>
@@ -170,18 +171,19 @@ const Dashboard = () => {
   )}
 </div>
 
+<Separator className="my-4" />
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
-          <h2 className="text-base mb-2">Region Analysis</h2>
+          <h2 className="text-base mb-2 ml-2 font-dmSans">Region Analysis</h2>
           <Barchart
             title="SFPS Acknowledgement Analysis By Region"
             subtitle="Source: P-COUNT"
           />
         </div>
         <div>
-          <h2 className="text-base mb-2">SFP & Alert Analysis</h2>
+          <h2 className="text-base mb-2 ml-2 font-robotoFlex">SFP & Alert Analysis</h2>
           <Piechart
             title="Total SFPS"
             subtitle="Source: P-COUNT"

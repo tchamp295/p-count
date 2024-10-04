@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Oleo+Script:wght@400;700&family=Edu+SA+Beginner:wght@400..700&family=Aboreto&family=Anek+Latin:wght@100..800&family=Major+Mono+Display&family=Quicksand:wght@300..700&family=Unbounded:wght@200..900&family=Vollkorn:ital,wght@0,400..900;1,400..900&family=Piazzolla:ital,opsz,wght@0,8..30,100..900;1,8..30,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Fuzzy+Bubbles:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Pacifico&family=Special+Elite&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

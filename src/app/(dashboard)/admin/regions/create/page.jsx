@@ -38,16 +38,19 @@ const AddRegion = () => {
   };
 
   return (
-    <div className="relative hidden flex-col items-start gap-8 md:flex">
-      <form className="grid w-full items-start gap-6  shadow-md" onSubmit={handleSubmit}>
+    <div className="relative hidden p-4 shadow-md rounded bg-white flex-col items-start gap-8 md:flex">
+      <form
+        className="grid w-full items-start gap-6 p-2  "
+        onSubmit={handleSubmit}
+      >
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium italic ">
-                        Add Region
+          <legend className="-ml-1 px-1 text-sm font-medium text-customColor ">
+            Add Region
           </legend>
 
-          <div className="grid gap-3">
+          <div className="grid gap-3 p-2">
             <Label htmlFor="region-name" className="text-sm">
-              Region Name
+              Name
             </Label>
             <Input
               id="region-name"
@@ -57,10 +60,10 @@ const AddRegion = () => {
               onChange={(e) => setRegionName(e.target.value)}
             />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-3 pl-2">
             <Button
               type="submit"
-              className="mt-4 bg-blue-400 hover:bg-purple-500"
+              className=" text-white  bg-customColor hover:bg-customColor hover:shadow-lg px-4 py-2 text-sm"
             >
               Create
             </Button>

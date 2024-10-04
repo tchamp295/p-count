@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import { LoadingSpinner } from "@/utils/spinner";
+import { Separator } from "@/components/ui/separator";
 
 export default function Settings() {
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ export default function Settings() {
           throw new Error("Failed to fetch settings");
         }
         const data = await response.json();
-        console.log("settings",data)
+        console.log("settings", data);
         setFormData(data); // Assuming the response has the correct format
         setLoading(false);
       } catch (err) {
@@ -80,7 +81,7 @@ export default function Settings() {
   };
 
   if (loading) {
-    return   <LoadingSpinner />;
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -88,9 +89,11 @@ export default function Settings() {
   }
 
   return (
-    <Card>
+    <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>System Settings</CardTitle>
+        <CardTitle className="text-base font-robotoFlex">
+          System Settings
+        </CardTitle>
         <CardDescription>Set up your application preferences. </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -176,8 +179,14 @@ export default function Settings() {
             </div>
           </div>
         </CardContent>
+
         <CardFooter className="border-t px-6 py-4">
-          <Button type="submit">Update</Button>
+          <Button
+            type="submit"
+            className="bg-[#4B49AC] text-white hover:bg-gray-400 hover:shadow-lg px-4 py-2 text-sm"
+          >
+            Update
+          </Button>
         </CardFooter>
       </form>
     </Card>

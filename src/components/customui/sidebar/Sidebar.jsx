@@ -7,7 +7,7 @@ const Sidebar = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
 
   return (
-    <div className="fixed w-64 top-[60px] bottom-5 left-0 h-screen border-r bg-slate-200 shadow-md hidden lg:block p-6 overflow-y-auto scrollbar-none">
+    <div className="fixed w-64 top-[60px] bottom-5 left-0 h-screen border-r bg-stone-100 shadow-md hidden lg:block p-6 overflow-y-auto scrollbar-none">
       <nav className="flex flex-col gap-2 text-sm font-medium">
         {navItems.map((item, index) => (
           <NavItem

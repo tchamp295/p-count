@@ -89,10 +89,17 @@ const AdminEditUserForm = ({ userId }) => {
 
   return (
     <div className="flex flex-col items-start gap-8 p-8 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold text-gray-800">Edit User</h2>
+      <h2 className="text-base font-medium font-robotoFlex px-4">
+        Update Information for{" "}
+        <span className="font-medium font-oleo text-[#4B49AC]">
+          {formData.name}
+        </span>
+      </h2>
       <form onSubmit={handleSubmit} className="w-full space-y-6">
         <fieldset className="p-6 border border-gray-200 rounded-lg shadow-sm">
-          <legend className="text-base font-medium text-gray-700">User Details</legend>
+          <legend className="text-base font-medium text-gray-700">
+            User Details
+          </legend>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="name" className="text-gray-600">
@@ -177,10 +184,10 @@ const AdminEditUserForm = ({ userId }) => {
             </div>
           </div>
 
-          <div className="flex justify-start mt-6">
+          <div className="flex justify-start mt-10">
             <Button
               type="submit"
-              className="px-4 py-2 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-all"
+              className="px-4 py-2 border border-teal-500 bg-teal-50  text-teal-500 font-semibold rounded hover:bg-teal-100 hover:border-teal-600 hover:text-teal-600 transition-all duration-300"
             >
               Update User
             </Button>

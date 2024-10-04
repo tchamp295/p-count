@@ -96,15 +96,15 @@ const AddSfp = () => {
   };
 
   return (
-    <div className="relative hidden flex-col items-start gap-8 md:flex">
-      <form className="grid w-full items-start gap-6" onSubmit={handleSubmit}>
+    <div className="relative hidden flex-col shadow-md rounded bg-white p-4 items-start gap-8 md:flex">
+      <form className="grid w-full items-start gap-6 p-2" onSubmit={handleSubmit}>
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">Create New SFP</legend>
+          <legend className="-ml-1 px-1 text-sm font-medium text-customColor">Create New SFP</legend>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
             {/* SFP Name */}
             <div className="flex flex-col gap-1">
-              <Label htmlFor="sfp-name" className="text-sm">SFP Name</Label>
+              <Label htmlFor="sfp-name" className="text-sm">Name</Label>
               <Input
                 id="sfp-name"
                 type="text"
@@ -116,7 +116,7 @@ const AddSfp = () => {
 
             {/* SFP Email */}
             <div className="flex flex-col gap-1">
-              <Label htmlFor="sfp-email" className="text-sm">SFP Email Address</Label>
+              <Label htmlFor="sfp-email" className="text-sm">Email Address</Label>
               <Input
                 id="sfp-email"
                 type="email"
@@ -128,7 +128,7 @@ const AddSfp = () => {
 
             {/* SFP Telephone */}
             <div className="flex flex-col gap-1">
-              <Label htmlFor="sfp-telephone" className="text-sm">SFP Telephone</Label>
+              <Label htmlFor="sfp-telephone" className="text-sm">Telephone</Label>
               <Input
                 id="sfp-telephone"
                 type="tel"
@@ -189,10 +189,10 @@ const AddSfp = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-start">
+          <div className="flex justify-start pl-2 mt-10 pb-4">
           <Button
               type="submit"
-              className="text-sm px-4 py-2 bg-purple-400 hover:bg-purple-500"
+              className=" text-white  bg-customColor hover:bg-customColor hover:shadow-lg px-4 py-2 text-sm"
               disabled={loading}
             >
               {loading ? (

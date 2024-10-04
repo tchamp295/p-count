@@ -25,28 +25,27 @@ const Navbar = () => {
     <div className="sticky top-0 z-20 bg-gradient-to-r from-gray-100 via-gray-50 to-white shadow-md h-16 flex items-center justify-between lg:h-[60px] px-4 lg:px-8 transition-all duration-300">
       {/* Logo and Branding */}
       <div className="flex items-center gap-4">
-  <Link
-    href="/"
-    className="flex items-center font-matrix gap-2 font-semibold text-lg lg:text-xl text-gray-800 hover:text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 ease-in-out"
-  >
-    <div className="relative">
-      <Image
-        src="/worrior.png"
-        alt="P-count logo"
-        width={40} // Slightly larger for better visual impact
-        height={40}
-        className="rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 hover:rotate-6" // Add hover scale and slight rotation
-      />
-      {/* Optional glowing effect around the image */}
-      <span className="absolute inset-0 rounded-full border border-purple-500 animate-pulse"></span>
-    </div>
-    <span className="relative">
-      P-count
-      <span className="absolute -bottom-1 left-0 h-1 w-full bg-gradient-to-r from-purple-500 to-pink-500 transform scale-x-0 transition-transform duration-300 hover:scale-x-100"></span>
-    </span>
-  </Link>
-</div>
-
+        <Link
+          href="/"
+          className="flex items-center font-matrix gap-2 font-semibold text-lg lg:text-xl text-gray-800 hover:text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 ease-in-out"
+        >
+          <div className="relative">
+            <Image
+              src="/worrior.png"
+              alt="P-count logo"
+              width={40} // Slightly larger for better visual impact
+              height={40}
+              className="rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 hover:rotate-6" // Add hover scale and slight rotation
+            />
+            {/* Optional glowing effect around the image */}
+            <span className="absolute inset-0 rounded-full border border-purple-500 animate-pulse"></span>
+          </div>
+          <span className="relative text-base font-quicksand font-bold text-customColor uppercase">
+            P-count Admin
+            <span className="absolute -bottom-1 left-0 h-1 w-full bg-gradient-to-r from-purple-500 to-pink-500 transform scale-x-0 transition-transform duration-300 hover:scale-x-100"></span>
+          </span>
+        </Link>
+      </div>
 
       {/* Search Bar (Uncomment if needed) */}
       {/* <form className="hidden md:flex lg:max-w-xl">
@@ -95,7 +94,10 @@ const Navbar = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/admin/profile" className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300 px-4 py-2 rounded-md">
+              <Link
+                href="/admin/profile"
+                className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300 px-4 py-2 rounded-md"
+              >
                 Profile
               </Link>
             </DropdownMenuItem>

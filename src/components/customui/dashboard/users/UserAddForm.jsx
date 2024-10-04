@@ -22,19 +22,19 @@ const AdminUserForm = () => {
     toast.error(state.error);
   } else if (state && state.success) {
     toast.success("User created successfully!");
-    router.push("/admin/user-management"); 
+    router.push("/admin/user-management");
   }
 
   return (
-    <div className="relative hidden flex-col items-start gap-8 md:flex">
-      <form action={formAction} className="grid w-full items-start gap-6">
+    <div className="relative bg-white p-4 rounded hidden flex-col items-start shadow-md gap-8 md:flex">
+      <form action={formAction} className="grid w-full items-start gap-6 px-4 py-4">
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">
-            Create New User
+          <legend className="-ml-1 px-1 text-base text-customColor ">
+          Register New User
           </legend>
 
           {/* Grid container to arrange fields in three columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 p-2 gap-4">
             {/* IP Name */}
             <div className="flex flex-col gap-1">
               <Label htmlFor="name" className="text-sm">
@@ -101,12 +101,12 @@ const AdminUserForm = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-start">
+          <div className="flex justify-start mt-10 px-2">
             <Button
               type="submit"
-              className="text-sm px-4 py-2 bg-purple-400 hover:bg-purple-500"
+              className="px-2 py-2 border border-teal-500 bg-teal-50  text-teal-500 font-semibold rounded hover:bg-teal-100 hover:border-teal-600 hover:text-teal-600 transition-all duration-300"
             >
-              Create
+             Create User
             </Button>
           </div>
         </fieldset>

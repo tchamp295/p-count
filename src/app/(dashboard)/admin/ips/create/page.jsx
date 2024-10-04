@@ -87,15 +87,15 @@ const AddIp = () => {
   };
 
   return (
-    <div className="relative hidden flex-col items-start gap-8 md:flex">
-      <form className="grid w-full items-start gap-6" onSubmit={handleSubmit}>
+    <div className="relative shadow-md p-4 bg-white hidden rounded flex-col items-start gap-8 md:flex">
+      <form className="grid w-full p-2 items-start gap-6" onSubmit={handleSubmit}>
         <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">
+          <legend className="-ml-1 px-1 text-sm font-medium text-customColor">
             Create New IP
           </legend>
 
           {/* Grid container to arrange fields in three columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 p-2 gap-4">
             {/* IP Name */}
             <div className="flex flex-col gap-1">
               <Label htmlFor="ip-name" className="text-sm">
@@ -230,11 +230,11 @@ const AddIp = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-start">
+          <div className="flex justify-start pl-2">
             <Button
               type="submit"
-              className="text-sm px-4 py-2 bg-purple-400 hover:bg-purple-500"
-            >
+              className=" text-white  bg-customColor hover:bg-customColor hover:shadow-lg px-4 py-2 text-sm"
+              >
               Create
             </Button>
           </div>
