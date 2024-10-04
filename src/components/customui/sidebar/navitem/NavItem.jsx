@@ -64,12 +64,12 @@ const NavItem = ({
     >
       <AccordionItem value={title}>
         <AccordionTrigger
-         className={cn(
-          "flex items-center gap-3 rounded px-3 py-2 transition-all w-full",
-          isActive
-            ? "bg-[#4B49AC] text-white"
-            : "text-slate-700 hover:text-blue-500"
-        )}
+          className={cn(
+            "flex items-center gap-3 rounded px-3 py-2 transition-all w-full",
+            isActive
+              ? "bg-[#4B49AC] text-white"
+              : "text-slate-700 hover:text-blue-500"
+          )}
         >
           <span className="flex items-center text-[#4B49AC] h-5 w-5">
             {icon}
@@ -81,17 +81,17 @@ const NavItem = ({
         </AccordionTrigger>
         <AccordionContent className="pl-6  border-none   ">
           {links.map((link, index) => (
-            <Link
-              key={index}
-              href={link.href}
-
-              className="flex items-center font-robotoFlex text-sm gap-2 pl-4 py-2 text-black hover:text-primary"
-            >
-              <span className="flex items-center text-[#4B49AC] h-3 w-3">
-                {link.icon}
-              </span>
-              <span className="text-sm">{link.label}</span>
-            </Link>
+         
+              <Link
+                key={index}
+                href={link.href}
+                className="flex items-center font-robotoFlex text-sm gap-1 pl-2 py-1  text-black hover:text-primary"
+              >
+                <span className="flex items-center  text-customColor tex-2xl">
+                  {link.icon}
+                </span>
+                <span className="text-sm hover:text-blue-400 hover:underline">{link.label}</span>
+              </Link>
           ))}
         </AccordionContent>
       </AccordionItem>
