@@ -56,23 +56,23 @@ const AdvisoryForm = () => {
   };
 
   return (
-    <div className="relative hidden flex-col items-start gap-8 md:flex">
-      <form className="grid w-full items-start gap-6" onSubmit={handleSubmit}>
+    <div className="relative bg-white p-4 hidden flex-col items-start shadow-md gap-8 md:flex">
+      <form className="grid w-full items-start gap-6  px-4 py-4" onSubmit={handleSubmit}>
         <fieldset className="grid gap-6 rounded-lg border p-4">
           <legend className="-ml-1 px-1 text-sm font-medium">
             Create Advisory
           </legend>
-          <div className="grid grid-cols-1  gap-4">
+          <div className="grid grid-cols-1  gap-4 p-2">
             <div className="flex flex-col gap-1">
               <Label htmlFor="description" className="text-sm">
                 Description
               </Label>
               <Textarea
                 id="description"
-                placeholder="Advisory description"
+                placeholder=""
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="border rounded-md p-2 w-full"
+                className="border rounded-md p-2 w-full focus-visible:ring-0"
                 rows={4} // Adjust rows as needed
               />
             </div>
@@ -85,7 +85,7 @@ const AdvisoryForm = () => {
                 id="category"
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="border p-2 rounded-md"
+                className="border p-2 rounded-md ring-0 focus-visible:ring-0 outline-none"
               >
                 <option value="">Select a Category</option>
                 {categories.map((category) => (
@@ -97,10 +97,10 @@ const AdvisoryForm = () => {
             </div>
           </div>
 
-          <div className="col-span-3">
+          <div className="col-span-3 mt-10 px-2">
             <Button
               type="submit"
-              className="mt-4 bg-purple-400 hover:bg-purple-500"
+              className="px-4 py-2 border border-teal-500 bg-teal-50  text-teal-500 font-semibold rounded hover:bg-teal-100 hover:border-teal-600 hover:text-teal-600 transition-all duration-300"
             >
               Create
             </Button>

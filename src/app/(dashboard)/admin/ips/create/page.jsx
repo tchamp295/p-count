@@ -104,9 +104,11 @@ const AddIp = () => {
               <Input
                 id="ip-name"
                 type="text"
-                placeholder="e.g. Kisumu"
+                placeholder=""
                 value={ipName}
                 onChange={(e) => setIpName(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
+
               />
             </div>
 
@@ -118,9 +120,11 @@ const AddIp = () => {
               <Input
                 id="ip-telephone"
                 type="tel"
-                placeholder="e.g. 123-456-7890"
+                placeholder=""
                 value={ipTelephone}
                 onChange={(e) => setIpTelephone(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
+
               />
             </div>
 
@@ -132,9 +136,10 @@ const AddIp = () => {
               <Input
                 id="ip-email"
                 type="email"
-                placeholder="e.g. email@example.com"
+                placeholder=" "
                 value={ipEmailAddress}
                 onChange={(e) => setIpEmailAddress(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -146,9 +151,10 @@ const AddIp = () => {
               <Input
                 id="ip-postal-address"
                 type="text"
-                placeholder="e.g. P.O. Box 1234"
+                placeholder=" "
                 value={ipPostalAddress}
                 onChange={(e) => setIpPostalAddress(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -160,9 +166,10 @@ const AddIp = () => {
               <Input
                 id="ip-physical-location"
                 type="text"
-                placeholder="e.g. 123 Main St"
+                placeholder=" "
                 value={ipPhysicalLocation}
                 onChange={(e) => setIpPhysicalLocation(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -174,9 +181,10 @@ const AddIp = () => {
               <Input
                 id="ip-contact-person"
                 type="text"
-                placeholder="e.g. John Doe"
+                placeholder=" "
                 value={ipContactPerson}
                 onChange={(e) => setIpContactPerson(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -188,9 +196,10 @@ const AddIp = () => {
               <Input
                 id="ip-contact-telephone"
                 type="tel"
-                placeholder="e.g. 098-765-4321"
+                placeholder=" "
                 value={ipContactTelephone}
                 onChange={(e) => setIpContactTelephone(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -202,9 +211,10 @@ const AddIp = () => {
               <Input
                 id="ip-contact-email"
                 type="email"
-                placeholder="e.g. contact@example.com"
+                placeholder=""
                 value={ipContactEmail}
                 onChange={(e) => setIpContactEmail(e.target.value)}
+                className="ring-0  focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -217,7 +227,7 @@ const AddIp = () => {
                 id="region-select"
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
-                className="border p-2 rounded"
+                className="border p-2 rounded ring-0  focus-visible:ring-0 outline-none"
               >
                 <option value="">Select a Region</option>
                 {regions.map((region) => (

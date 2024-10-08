@@ -15,6 +15,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LoadingSpinner } from "@/utils/spinner";
+import { Tooltip } from "@mui/material";
+import { Trash2, UserPen } from "lucide-react";
 
 const IpDataTable = () => {
   const getGridRowId = (row) => row["_id"];
@@ -27,16 +29,22 @@ const IpDataTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     const response = await fetch("/api/ips");
     const ips = await response.json();
     setRows(ips);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const handleDeleteClick = (row) => {
     setSelectedRow(row);
@@ -97,31 +105,38 @@ const IpDataTable = () => {
   const columns = [
     { field: "ipName", headerName: "IP Name", width: 150 },
     { field: "ipTelephone", headerName: "IP Telephone", width: 150 },
-    { field: "ipEmailAddress", headerName: "IP Email", width: 150 },
-    { field: "ipPostalAddress", headerName: "IP Postal Address", width: 150 },
-    { field: "ipPhysicalLocation", headerName: "IP Physical Location", width: 150 },
+    {
+      field: "ipPhysicalLocation",
+      headerName: "IP Physical Location",
+      width: 150,
+    },
     { field: "ipContactPerson", headerName: "IP Contact Person", width: 150 },
-    { field: "ipContactTelephone", headerName: "IP Contact Telephone", width: 150 },
-    { field: "ipContactEmail", headerName: "IP Contact Email", width: 150 },
+    {
+      field: "ipContactTelephone",
+      headerName: "IP Contact Telephone",
+      width: 150,
+    },
     {
       field: "actions",
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div className="flex items-center gap-2">
-          <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
-            <button className="text-blue-600 hover:text-blue-800 text-sm px-3 py-1 rounded-md flex items-center transition-all duration-300 ease-in-out">
-              <MdModeEdit className="mr-1" />
-              Edit
+        <div className="flex items-center mt-2 gap-2">
+          <Tooltip title="Edit User" arrow>
+            <Link href={`/admin/ips-management/ips/create/${params.row._id}`}>
+              <button className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out">
+                <UserPen className="text-teal-400" size={18} />
+              </button>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Delete  User" arrow>
+            <button
+              className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
+              onClick={() => handleDeleteClick(params.row)}
+            >
+              <Trash2 className="text-red-600" size={18} />
             </button>
-          </Link>
-          <button
-            className="text-red-600 hover:text-red-800 text-sm px-3 py-1 rounded-md flex items-center transition-all duration-300 ease-in-out"
-            onClick={() => handleDeleteClick(params.row)}
-          >
-            <MdDeleteForever className="mr-1" />
-            Delete
-          </button>
+          </Tooltip>
         </div>
       ),
     },
@@ -130,10 +145,11 @@ const IpDataTable = () => {
   return (
     <div className="w-full p-4 bg-white shadow-lg rounded-lg">
       <div className="flex justify-between items-center pb-4">
-        <h3 className="text-lg font-semibold text-gray-800">List of IPS</h3>
-        <Link href="/admin/ips-management/ips/create">
-          <button className="border border-gray-300 bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold hover:bg-[#d7d2c5]">
-            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+        <h3 className="text-lg font-medium text-gray-800">List of IPS</h3>
+        <Link href="/admin/ips/create">
+          <button className="flex items-center px-2 py-2 border border-teal-500 text-teal-500 hover:bg-green-50 hover:border-teal-600 hover:text-teal-600 rounded-md text-sm font-medium shadow-sm transition ease-in-out duration-300">
+            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create
+            New
           </button>
         </Link>
       </div>
@@ -159,24 +175,23 @@ const IpDataTable = () => {
         </MuiAlert>
       </Snackbar>
       <div className="h-96">
-        {rows.length > 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            getRowId={getGridRowId}
-            pageSizeOptions={[5, 10, 25, 100]}
-            checkboxSelection
-            slots={{ toolbar: GridToolbar }}
-            className="bg-gray-50"
-          />
-        ) : (
-          <LoadingSpinner />
-        )}
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          getRowId={getGridRowId}
+          pageSizeOptions={[5, 10, 25, 100]}
+          checkboxSelection
+          slots={{ toolbar: GridToolbar }}
+          className="bg-gray-50"
+        />
       </div>
 
       {/* ShadCN UI AlertDialog */}
-      <AlertDialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
+      <AlertDialog
+        open={isConfirmationOpen}
+        onOpenChange={setIsConfirmationOpen}
+      >
         <AlertDialogTrigger asChild>
           <button className="hidden"></button>
         </AlertDialogTrigger>

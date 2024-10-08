@@ -52,7 +52,7 @@ const AdminUsers = () => {
     fetch("/api/users").then((res) => {
       res.json().then((users) => {
         setRows(users);
-        setLoading(false)
+        setLoading(false);
       });
     });
   };
@@ -114,10 +114,8 @@ const AdminUsers = () => {
     setSnackbarOpen(false);
   };
   if (loading) {
-    return   <LoadingSpinner />;
+    return <LoadingSpinner />;
   }
-
- 
 
   const columns = [
     { field: "name", headerName: "Full name", width: 150 },
@@ -143,7 +141,7 @@ const AdminUsers = () => {
             </Link>
           </Tooltip>
 
-          <Tooltip title="Delete User" arrow>
+          <Tooltip title="Delete  User" arrow>
             <button
               className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
               onClick={() => handleDeleteClick(params.row)}
@@ -183,17 +181,15 @@ const AdminUsers = () => {
         </MuiAlert>
       </Snackbar>
 
-     
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          checkboxSelection
-          getRowId={(row) => row._id}
-          components={{ Toolbar: GridToolbar }}
-          className="shadow-sm"
-        />
-      
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        checkboxSelection
+        getRowId={(row) => row._id}
+        components={{ Toolbar: GridToolbar }}
+        className="shadow-sm"
+      />
 
       {/* Confirmation Dialog */}
       <ConfirmationDialog

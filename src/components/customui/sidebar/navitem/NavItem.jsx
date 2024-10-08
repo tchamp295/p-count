@@ -38,7 +38,7 @@ const NavItem = ({
         className={cn(
           "flex items-center gap-3 rounded px-3 py-2 transition-all w-full",
           isActive
-            ? "bg-[#4B49AC] text-white"
+            ? "text-[#4B49AC] font-semibold "
             : "text-slate-700 hover:text-blue-500"
         )}
       >
@@ -67,7 +67,7 @@ const NavItem = ({
           className={cn(
             "flex items-center gap-3 rounded px-3 py-2 transition-all w-full",
             isActive
-              ? "bg-[#4B49AC] text-white"
+              ? "text-[#4B49AC] font-semibold "
               : "text-slate-700 hover:text-blue-500"
           )}
         >

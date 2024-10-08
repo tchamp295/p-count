@@ -42,14 +42,15 @@ const LoginForm = () => {
   }, [state?.success, state?.error, router]);
 
   return (
-    <form className="grid gap-4" action={formAction} onSubmit={handleSubmit}>
-      <div className="grid gap-2">
+    <form className="grid gap-4 " action={formAction} onSubmit={handleSubmit}>
+      <div className="grid gap-2 text-base">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="email"
           placeholder="m@example.com"
           name="email"
+          className="focus-visible:ring-0"
         />
       </div>
       <div className="grid gap-2">
@@ -60,6 +61,7 @@ const LoginForm = () => {
           type="password"
           placeholder="Password"
           name="password"
+          className="focus-visible:ring-0"
         />
       </div>
 

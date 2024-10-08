@@ -8,34 +8,38 @@ import { IoMdAdd } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import { LoadingSpinner } from "@/utils/spinner";
+import { Trash2, UserPen } from "lucide-react";
+import { Tooltip } from "@mui/material";
 
 // Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
-    if (!isOpen) return null;
-  
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
-          <p className="text-sm mb-6">Are you sure you want to delete this Advisory Category?</p>
-          <div className="flex justify-end space-x-4">
-            <button
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              onClick={onConfirm}
-            >
-              Confirm
-            </button>
-          </div>
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
+        <p className="text-sm mb-6">
+          Are you sure you want to delete this Advisory Category?
+        </p>
+        <div className="flex justify-end space-x-4">
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            onClick={onConfirm}
+          >
+            Confirm
+          </button>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
 const AdvisoryCategoryDataTable = () => {
   const getGridRowId = (row) => {
@@ -50,27 +54,34 @@ const AdvisoryCategoryDataTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
       const res = await fetch("/api/advisoryCategory");
       const data = await res.json();
-  console.log(data);
-  
+      // console.log(data);
+
       if (res.ok) {
-        setRows(data.categories); // Set the rows to the 'categories' array from the response
+        setRows(data.categories);
+        setLoading(false)
       } else {
         console.error("Failed to fetch advisory categories: ", data.message);
       }
     } catch (error) {
       console.error("Error fetching advisory categories:", error);
+      setLoading(false)
     }
   };
-  
 
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const handleDeleteClick = (row) => {
     setSelectedRow(row);
@@ -92,12 +103,15 @@ const AdvisoryCategoryDataTable = () => {
     }
 
     try {
-      const response = await fetch(`/api/advisoryCategory?id=${selectedRow._id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/api/advisoryCategory?id=${selectedRow._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = await response.json();
 
       if (response.ok) {
@@ -127,46 +141,45 @@ const AdvisoryCategoryDataTable = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-  
+
   const columns = [
     { field: "categoryName", headerName: "Category", width: 150 },
-    { field: "desc", headerName: "Description", width: 200 }, 
-   
-  
+    { field: "desc", headerName: "Description", width: 200 },
+
     {
-        field: "actions",
-        headerName: "Actions",
-        width: 200,
-        renderCell: (params) => (
-          <div className="flex items-center gap-2">
+      field: "actions",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (params) => (
+        <div className="flex items-center  mt-2 gap-2">
+          <Tooltip title="Edit User" arrow>
             <Link href={`/admin/regions/${params.row._id}`}>
-            
-                <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none">
-                  <MdModeEdit className="mr-1" />
-                  Edit
-                </button>
-            
+            <button className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out">
+            <UserPen className="text-teal-400" size={18} />
+              </button>
             </Link>
+          </Tooltip>
+          <Tooltip title="Delete  User" arrow>
             <button
-              className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
+              className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
               onClick={() => handleDeleteClick(params.row)}
             >
-              <MdDeleteForever className="mr-1" />
-              Delete
+              <Trash2 className="text-red-600" size={18} />
             </button>
-          </div>
-        ),
-      }
-      
+          </Tooltip>
+        </div>
+      ),
+    },
   ];
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-6 py-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center pb-3 px-1">
         <h3 className="">Advisory Category List</h3>
-        <Link href="/admin/advisoryCategory/create">
-          <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
-            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+        <Link href="/admin/advisory/category/create">
+          <button className="flex items-center px-2 py-2 border border-teal-500 text-teal-500 hover:bg-green-50 hover:border-teal-600 hover:text-teal-600 rounded-md text-sm font-medium shadow-sm transition ease-in-out duration-300">
+            <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create
+            New
           </button>
         </Link>
       </div>
@@ -192,22 +205,17 @@ const AdvisoryCategoryDataTable = () => {
         </MuiAlert>
       </Snackbar>
       <div className="">
-        {rows.length > 0 ? (
+       
           <DataGrid
             rows={rows}
             columns={columns}
             pageSize={5}
             getRowId={getGridRowId}
             pageSizeOptions={[5, 10, 25, 100]}
-
             checkboxSelection
             slots={{ toolbar: GridToolbar }}
-
           />
-        ) : (
-          <LoadingSpinner />
-          
-        )}
+        
       </div>
 
       {/* Confirmation Dialog */}

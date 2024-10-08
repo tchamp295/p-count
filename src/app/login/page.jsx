@@ -36,7 +36,7 @@ export default function SignIn() {
           <div className="space-y-6">
             <div className="text-center space-y-6">
             <h1 className="text-4xl font-extrabold text-gray-900">Sign In</h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-base text-gray-600">
               Enter your email to log into your account
             </p></div>
             <LoginForm />

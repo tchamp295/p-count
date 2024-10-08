@@ -27,10 +27,13 @@ const AdminUserForm = () => {
 
   return (
     <div className="relative bg-white p-4 rounded hidden flex-col items-start shadow-md gap-8 md:flex">
-      <form action={formAction} className="grid w-full items-start gap-6 px-4 py-4">
+      <form
+        action={formAction}
+        className="grid w-full items-start gap-6 px-4 py-4"
+      >
         <fieldset className="grid gap-6 rounded-lg border p-4">
           <legend className="-ml-1 px-1 text-base text-customColor ">
-          Register New User
+            Register New User
           </legend>
 
           {/* Grid container to arrange fields in three columns */}
@@ -40,7 +43,12 @@ const AdminUserForm = () => {
               <Label htmlFor="name" className="text-sm">
                 Full Name
               </Label>
-              <Input type="text" placeholder="e.g. Kevin" name="name" />
+              <Input
+                type="text"
+                placeholder=" "
+                name="name"
+                className="ring-0 focus-visible:ring-0 outline-none"
+              />
             </div>
 
             {/* IP Telephone */}
@@ -48,7 +56,12 @@ const AdminUserForm = () => {
               <Label htmlFor="telephone" className="text-sm">
                 Telephone
               </Label>
-              <Input type="tel" placeholder="e.g. 123-456-7890" name="phone" />
+              <Input
+                type="tel"
+                placeholder=" "
+                name="phone"
+                className="ring-0 focus-visible:ring-0 outline-none"
+              />
             </div>
 
             {/* IP Email Address */}
@@ -58,8 +71,9 @@ const AdminUserForm = () => {
               </Label>
               <Input
                 type="email"
-                placeholder="e.g. email@example.com"
+                placeholder=" "
                 name="email"
+                className="ring-0 focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -71,7 +85,7 @@ const AdminUserForm = () => {
               <Select
                 id="isAdmin"
                 name="isAdmin"
-                className="border rounded p-2"
+                className="border rounded p-2 ring-0  focus-visible:ring-0 outline-none"
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
@@ -106,7 +120,7 @@ const AdminUserForm = () => {
               type="submit"
               className="px-2 py-2 border border-teal-500 bg-teal-50  text-teal-500 font-semibold rounded hover:bg-teal-100 hover:border-teal-600 hover:text-teal-600 transition-all duration-300"
             >
-             Create User
+              Create User
             </Button>
           </div>
         </fieldset>

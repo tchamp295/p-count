@@ -55,9 +55,10 @@ const AddRegion = () => {
             <Input
               id="region-name"
               type="text"
-              placeholder="e.g Kisumu"
+              placeholder=" "
               value={regionName}
               onChange={(e) => setRegionName(e.target.value)}
+              className="ring-0 focus-visible:ring-0 outline-none"
             />
           </div>
           <div className="col-span-3 pl-2">

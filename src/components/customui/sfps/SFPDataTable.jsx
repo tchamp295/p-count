@@ -9,7 +9,7 @@ import { MdDeleteForever, MdVisibility } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import { Tooltip } from "@mui/material";
 import { Button } from "@/components/ui/button";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, UserPen, Trash2 } from "lucide-react";
 import { LoadingSpinner } from "@/utils/spinner";
 
 // Reusable ConfirmationDialog component
@@ -55,21 +55,20 @@ const SFPDataTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] = useState(false);
+  // const handleCreateNewClick = () => {
+  //   setLoading(true);
 
-  const handleCreateNewClick = () => {
-    setLoading(true);
+  //   // Simulate an async operation like form submission or data fetching
+  //   setTimeout(() => {
+  //     // After the operation is done, set loading to false
+  //     setLoading(false);
 
-    // Simulate an async operation like form submission or data fetching
-    setTimeout(() => {
-      // After the operation is done, set loading to false
-      setLoading(false);
-
-      // Normally you'd handle a redirect or additional logic here
-      // Example: router.push("/some-path")
-    }, 2000);
-  };
+  //     // Normally you'd handle a redirect or additional logic here
+  //     // Example: router.push("/some-path")
+  //   }, 2000);
+  // };
   const fetchData = async () => {
     try {
       const res = await fetch("/api/sfps");
@@ -88,14 +87,20 @@ const SFPDataTable = () => {
       }));
 
       setRows(transformedRows);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch SFPs:", error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const handleDeleteClick = (row) => {
     setSelectedRow(row);
@@ -156,9 +161,7 @@ const SFPDataTable = () => {
   const columns = [
     { field: "ipName", headerName: "IP Name", width: 150 },
     { field: "sfpName", headerName: "SFP Name", width: 200 },
-    { field: "sfpEmail", headerName: "SFP Email", width: 200 },
     { field: "sfpTelephone", headerName: "SFP Telephone", width: 200 },
-    { field: "gender", headerName: "Gender", width: 200 },
     { field: "regionName", headerName: "Region Name", width: 200 },
 
     {
@@ -166,42 +169,35 @@ const SFPDataTable = () => {
       headerName: "Actions",
       width: 240, // Adjust width as needed
       renderCell: (params) => (
-        <div className="flex items-center gap-1">
-          <Link href={`/admin/ips-management/sfp${params.row._id}`}>
-            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center">
-              <MdModeEdit className="mr-1" />
-              Edit
+        <div className="flex items-center mt-2 gap-2">
+          <Tooltip title="Edit User" arrow>
+            <Link href={`/admin/ips-management/sfp${params.row._id}`}>
+              <button className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out">
+                <UserPen className="text-teal-400" size={18} />
+              </button>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Delete  User" arrow>
+            <button
+              className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
+              onClick={() => handleDeleteClick(params.row)}
+            >
+              <Trash2 className="text-red-600" size={18} />
             </button>
-          </Link>
-          <button
-            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center"
-            onClick={() => handleDeleteClick(params.row)}
-          >
-            <MdDeleteForever className="mr-1" />
-            Delete
-          </button>
+          </Tooltip>
         </div>
       ),
     },
   ];
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-6 py-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center pb-3 px-1">
         <h3 className="">Sfps List</h3>
-        <Link href="/admin/ips-management/sfps/create">
-          <Button
-            onClick={handleCreateNewClick}
-            disabled={loading}
-            className="border bg-[#e5eadc] text-[#396b21]"
-          >
-            {loading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Plus className="mr-2 h-4 w-4" />
-            )}
-            {loading ? "Creating..." : "Create New"}
-          </Button>
+        <Link href="/admin/sfps/create">
+          <button className="flex items-center px-2 py-2 border border-teal-500 text-teal-500 hover:bg-green-50 hover:border-teal-600 hover:text-teal-600 rounded-md text-sm font-medium shadow-sm transition ease-in-out duration-300">
+          <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create New
+          </button>
         </Link>
       </div>
       {successMessage && <div className="">{successMessage}</div>}
@@ -226,20 +222,15 @@ const SFPDataTable = () => {
         </MuiAlert>
       </Snackbar>
       <div className="">
-        {rows.length > 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            getRowId={getGridRowId}
-            pageSizeOptions={[5, 10, 25, 100]}
-            checkboxSelection
-            slots={{ toolbar: GridToolbar }}
-
-          />
-        ) : (
-          <LoadingSpinner />
-        )}
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          getRowId={getGridRowId}
+          pageSizeOptions={[5, 10, 25, 100]}
+          checkboxSelection
+          slots={{ toolbar: GridToolbar }}
+        />
       </div>
 
       {/* Confirmation Dialog */}

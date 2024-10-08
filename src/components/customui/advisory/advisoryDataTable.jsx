@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DataGrid,GridToolbar  } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { IoMdAdd } from "react-icons/io";
-import { MdDeleteForever } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
+
 import { LoadingSpinner } from "@/utils/spinner";
+import { Trash2, UserPen } from "lucide-react";
+import { Tooltip } from "@mui/material";
 
 // Reusable ConfirmationDialog component
 const ConfirmationDialog = ({ isOpen, onCancel, onConfirm }) => {
@@ -52,6 +53,7 @@ const AdvisoryDataTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -69,14 +71,21 @@ const AdvisoryDataTable = () => {
       }));
 
       setRows(transformedRows);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch advisories:", error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const handleDeleteClick = (row) => {
     setSelectedRow(row);
@@ -143,31 +152,33 @@ const AdvisoryDataTable = () => {
       headerName: "Actions",
       width: 200,
       renderCell: (params) => (
-        <div className="flex items-center gap-2">
-          <Link href={`/admin/regions/${params.row._id}`}>
-            <button className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none">
-              <MdModeEdit className="mr-1" />
-              Edit
+        <div className="flex items-center mt-2 gap-2">
+          <Tooltip title="Edit User" arrow>
+            <Link href={`/admin/regions/${params.row._id}`}>
+              <button className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out">
+                <UserPen className="text-teal-400" size={18} />
+              </button>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Delete  User" arrow>
+            <button
+              className="flex items-center space-x-2 text-sm font-semibold px-4 py-2 border hover:shadow-lg transition-all duration-300 ease-in-out"
+              onClick={() => handleDeleteClick(params.row)}
+            >
+              <Trash2 className="text-red-600" size={18} />
             </button>
-          </Link>
-          <button
-            className="text-[#396b21] text-sm px-4 py-2 rounded-md flex items-center border border-transparent hover:border-gray-300 focus:border-gray-500 focus:outline-none"
-            onClick={() => handleDeleteClick(params.row)}
-          >
-            <MdDeleteForever className="mr-1" />
-            Delete
-          </button>
+          </Tooltip>
         </div>
       ),
     },
   ];
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-6 py-4 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center pb-3 px-1">
         <h3 className="">Advisory List</h3>
         <Link href="/admin/advisory/create">
-          <button className="border bg-[#e5eadc] text-[#396b21] p-2 text-sm rounded-md flex items-center font-semibold">
+          <button className="flex items-center px-2 py-2 border border-teal-500 text-teal-500 hover:bg-green-50 hover:border-teal-600 hover:text-teal-600 rounded-md text-sm font-medium shadow-sm transition ease-in-out duration-300">
             <IoMdAdd className="mr-2" style={{ fontWeight: "bold" }} /> Create
             New
           </button>
@@ -195,21 +206,15 @@ const AdvisoryDataTable = () => {
         </MuiAlert>
       </Snackbar>
       <div className="">
-        {rows.length > 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            getRowId={getGridRowId}
-            pageSizeOptions={[5, 10, 25, 100]}
-
-            checkboxSelection
-             slots={{ toolbar: GridToolbar }}
-          />
-        ) : (
-          <LoadingSpinner />
-          
-        )}
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          getRowId={getGridRowId}
+          pageSizeOptions={[5, 10, 25, 100]}
+          checkboxSelection
+          slots={{ toolbar: GridToolbar }}
+        />
       </div>
 
       {/* Confirmation Dialog */}

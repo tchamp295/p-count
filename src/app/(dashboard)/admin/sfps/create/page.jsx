@@ -108,9 +108,10 @@ const AddSfp = () => {
               <Input
                 id="sfp-name"
                 type="text"
-                placeholder="e.g. Kisumu"
+                placeholder=" "
                 value={sfpName}
                 onChange={(e) => setSfpName(e.target.value)}
+                className="ring-0 focus-visible:ring-0 outline-none"
               />
             </div>
 
@@ -120,9 +121,11 @@ const AddSfp = () => {
               <Input
                 id="sfp-email"
                 type="email"
-                placeholder="e.g. email@example.com"
+                placeholder=" "
                 value={sfpEmail}
                 onChange={(e) => setSfpEmail(e.target.value)}
+                className="ring-0 focus-visible:ring-0 outline-none"
+
               />
             </div>
 
@@ -132,9 +135,11 @@ const AddSfp = () => {
               <Input
                 id="sfp-telephone"
                 type="tel"
-                placeholder="e.g. 098-765-4321"
+                placeholder=" "
                 value={sfpTelephone}
                 onChange={(e) => setSfpTelephone(e.target.value)}
+                className="ring-0 focus-visible:ring-0 outline-none"
+
               />
             </div>
 
@@ -145,7 +150,7 @@ const AddSfp = () => {
                 id="gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className="rounded-lg border p-2"
+                className="rounded-lg border p-2 ring-0 focus-visible:ring-0 outline-none"
               >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
@@ -162,7 +167,7 @@ const AddSfp = () => {
                 id="ip"
                 value={ip}
                 onChange={(e) => setIp(e.target.value)}
-                className="rounded-lg border p-2"
+                className="rounded-lg border p-2 ring-0 focus-visible:ring-0 outline-none"
               >
                 <option value="">Select</option>
                 {ips.map((ip) => (
@@ -178,7 +183,7 @@ const AddSfp = () => {
                 id="region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="rounded-lg border p-2"
+                className="rounded-lg border p-2 ring-0 focus-visible:ring-0 outline-none"
               >
                 <option value="">Select</option>
                 {regions.map((region) => (
